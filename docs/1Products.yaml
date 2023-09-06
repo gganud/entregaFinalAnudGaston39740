@@ -1,0 +1,424 @@
+paths:
+  /api/products/:
+    get:
+      summary: Get All Products
+      tags:
+        - Products
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Products'
+              example:
+                {
+                  "status": "success",
+                  "payload": {
+                    "products": [
+                      {
+                        "title": "producto prueba",
+                        "description": "Este es un producto prueba",
+                        "price": 50,
+                        "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACoSURBVCjPY/jPAIMMCgxmYKiAEAOKwhmMDGZ//v/5/+M/qhI0BW/+gxQBlTDiUPDl/3v8Cn7//4VfwR/cVkB8kfI27S0WR+7rm/ui70X7i9YX88O7whtflANh7ouUPqgCBsbZLyBGAq1hRLBiX4BZiODBxgIpgAWPOYM/BgukGCl4En9jsswYkIIHKIzBgiiABg9QGINlxoAUPEBhDJYZwhdmDDZYWAoAtTEEdnXdy7IAAAAASUVORK5CYII=",
+                        "code": "aaa1",
+                        "stock": 10,
+                        "enable": true,
+                      },
+                      {
+                        "title": "producto prueba2",
+                        "description": "Este es un producto prueba",
+                        "code": "aaa2",
+                        "price": 50,
+                        "stock": 10,
+                        "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACoSURBVCjPY/jPAIMMCgxmYKiAEAOKwhmMDGZ//v/5/+M/qhI0BW/+gxQBlTDiUPDl/3v8Cn7//4VfwR/cVkB8kfI27S0WR+7rm/ui70X7i9YX88O7whtflANh7ouUPqgCBsbZLyBGAq1hRLBiX4BZiODBxgIpgAWPOYM/BgukGCl4En9jsswYkIIHKIzBgiiABg9QGINlxoAUPEBhDJYZwhdmDDZYWAoAtTEEdnXdy7IAAAAASUVORK5CYII=",
+                        "enable": true,
+                      }
+                    ],
+                    "pagination": {
+                      "totalDocs": 8,
+                      "limit": 10,
+                      "totalPages": 1,
+                      "page": 1,
+                      "pagingCounter": 1,
+                      "hasPrevPage": false,
+                      "hasNextPage": false,
+                      "prevPage": null,
+                      "nextPage": null
+                    }
+                  }
+                }
+
+        "500":
+          description: Internal Error Server
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Ocurrió un error"
+                }
+  
+    post:
+      summary: Create Product
+      tags:
+        - Products
+      requestBody:
+        description: Request Body
+        required: true
+        content:
+          application/json:
+            schema:
+              example:
+                {
+                  "title": "producto prueba",
+                  "description": "Este es un producto prueba",
+                  "code": "aaa1",
+                  "price": 50,
+                  "stock": 10,
+                  "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACoSURBVCjPY/jPAIMMCgxmYKiAEAOKwhmMDGZ//v/5/+M/qhI0BW/+gxQBlTDiUPDl/3v8Cn7//4VfwR/cVkB8kfI27S0WR+7rm/ui70X7i9YX88O7whtflANh7ouUPqgCBsbZLyBGAq1hRLBiX4BZiODBxgIpgAWPOYM/BgukGCl4En9jsswYkIIHKIzBgiiABg9QGINlxoAUPEBhDJYZwhdmDDZYWAoAtTEEdnXdy7IAAAAASUVORK5CYII=",
+                  "enable": true,
+                }
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Products'
+              example:
+                {
+                  "msg": "Producto creado",
+                  "result": {
+                    "id": "64c30da260cd8ee2765ab03a",
+                    "title": "producto prueba",
+                    "description": "Este es un producto prueba",
+                    "code": "aaa1",
+                    "price": 50,
+                    "status": true,
+                    "stock": 10,
+                    "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACoSURBVCjPY/jPAIMMCgxmYKiAEAOKwhmMDGZ//v/5/+M/qhI0BW/+gxQBlTDiUPDl/3v8Cn7//4VfwR/cVkB8kfI27S0WR+7rm/ui70X7i9YX88O7whtflANh7ouUPqgCBsbZLyBGAq1hRLBiX4BZiODBxgIpgAWPOYM/BgukGCl4En9jsswYkIIHKIzBgiiABg9QGINlxoAUPEBhDJYZwhdmDDZYWAoAtTEEdnXdy7IAAAAASUVORK5CYII=",
+                    "enable": true,
+                  }
+                }
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Empty authentication header!"
+                }
+
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "Authentication error"
+                }
+
+        "500":
+          description: Internal Error Server
+          content:
+            application/json:
+              example:
+                {
+                  "error": "El codigo ingresado ya esta siendo utilizado por otro producto"
+                }
+    
+  /api/products/{uid}:
+    get:
+      summary: Get Product by Id
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id to find
+          schema:
+            $type: ObjectId
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#components/schemas/Products'
+              example:
+                {
+                  "status": "success",
+                  "payload": {
+                    "id": "643c0c7701d8fb15b03506ff",
+                    "title": "producto prueba",
+                    "description": "Este es un producto prueba",
+                    "price": 200,
+                    "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACoSURBVCjPY/jPAIMMCgxmYKiAEAOKwhmMDGZ//v/5/+M/qhI0BW/+gxQBlTDiUPDl/3v8Cn7//4VfwR/cVkB8kfI27S0WR+7rm/ui70X7i9YX88O7whtflANh7ouUPqgCBsbZLyBGAq1hRLBiX4BZiODBxgIpgAWPOYM/BgukGCl4En9jsswYkIIHKIzBgiiABg9QGINlxoAUPEBhDJYZwhdmDDZYWAoAtTEEdnXdy7IAAAAASUVORK5CYII=",
+                    "code": "abc15",
+                    "stock": 25,
+                    "enable": true,
+                  }
+                }
+        
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              example:
+                {
+                  "errors": [
+                    {
+                      "value": "643c0c7701d8fb15b03506ffa",
+                      "msg": "No es un id valido",
+                      "param": "pid",
+                      "location": "params"
+                    }
+                  ]
+                }
+
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Empty authentication header!"
+                }
+
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "El producto con el id 645ee28b63c3491089e690c7 no existe o se encuentra eliminado"
+                }
+                
+        "500":
+          description: Internal Error Server
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Ocurrió un error"
+                }
+
+    put:
+      summary: Updated Product By Id
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id to updated
+          schema:
+            $type: ObjectId
+      requestBody:
+        description: Request Body
+        required: true
+        content:
+          application/json:
+            schema:
+              example:
+                {
+                  "title": "producto prueba modificado",
+                  "description": "Este es un producto prueba modificado",
+                  "code": "aaa1",
+                  "price": 50,
+                  "stock": 10,
+                  "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACoSURBVCjPY/jPAIMMCgxmYKiAEAOKwhmMDGZ//v/5/+M/qhI0BW/+gxQBlTDiUPDl/3v8Cn7//4VfwR/cVkB8kfI27S0WR+7rm/ui70X7i9YX88O7whtflANh7ouUPqgCBsbZLyBGAq1hRLBiX4BZiODBxgIpgAWPOYM/BgukGCl4En9jsswYkIIHKIzBgiiABg9QGINlxoAUPEBhDJYZwhdmDDZYWAoAtTEEdnXdy7IAAAAASUVORK5CYII=",
+                  "enable": true,
+                }
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              example:
+                {
+                  "status": "success",
+                  "payload": {
+                    "id": "643c0c7701d8fb15b03506ff",
+                    "title": "producto prueba modificado",
+                    "description": "Este es un producto prueba modificado",
+                    "code": "aaa1",
+                    "price": 50,
+                    "stock": 10,
+                    "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACoSURBVCjPY/jPAIMMCgxmYKiAEAOKwhmMDGZ//v/5/+M/qhI0BW/+gxQBlTDiUPDl/3v8Cn7//4VfwR/cVkB8kfI27S0WR+7rm/ui70X7i9YX88O7whtflANh7ouUPqgCBsbZLyBGAq1hRLBiX4BZiODBxgIpgAWPOYM/BgukGCl4En9jsswYkIIHKIzBgiiABg9QGINlxoAUPEBhDJYZwhdmDDZYWAoAtTEEdnXdy7IAAAAASUVORK5CYII=",
+                    "enable": true,
+                  },
+                  "message": "Product updated.",
+                }
+        
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              example:
+                {
+                  "errors": [
+                    {
+                      "value": "643c0c7701d8fb15b03506ffa",
+                      "msg": "No es un id valido",
+                      "param": "pid",
+                      "location": "params"
+                    }
+                  ]
+                }
+
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Empty authentication header!"
+                }
+
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "Authentication error"
+                }
+
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              example:
+                [
+                  { "error": "El codigo ingresado ya esta siendo utilizado por otro producto" },
+                  { "error": "El producto con el id 645ee28b63c3491089e690c7 no existe o se encuentra eliminado" }
+                ]
+
+        "500":
+          description: Internal Error Server
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Ocurrió un error"
+                }
+                
+    delete:
+      summary: Delete Product By Id
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id to delete
+          schema:
+            $type: ObjectId
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              example:
+                {
+                  "status": "success",
+                  "payload": {
+                    "id": "64718457791b1b7d00527584",
+                    "title": "producto prueba2",
+                    "description": "Este es un producto prueba",
+                    "code": "aaa2",
+                    "price": 50,
+                    "stock": 10,
+                    "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACoSURBVCjPY/jPAIMMCgxmYKiAEAOKwhmMDGZ//v/5/+M/qhI0BW/+gxQBlTDiUPDl/3v8Cn7//4VfwR/cVkB8kfI27S0WR+7rm/ui70X7i9YX88O7whtflANh7ouUPqgCBsbZLyBGAq1hRLBiX4BZiODBxgIpgAWPOYM/BgukGCl4En9jsswYkIIHKIzBgiiABg9QGINlxoAUPEBhDJYZwhdmDDZYWAoAtTEEdnXdy7IAAAAASUVORK5CYII=",
+                    "enable": false,
+                  },
+                  "message": "Product deleted.",
+                }
+
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              example:
+                {
+                  "errors": [
+                    {
+                      "value": "643c0c7701d8fb15b03506ffa",
+                      "msg": "No es un id valido",
+                      "param": "pid",
+                      "location": "params"
+                    }
+                  ]
+                }
+
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Empty authentication header!"
+                }
+
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "Authentication error"
+                }
+
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "El producto con el id 64718457791b1b7d00527585 no existe o se encuentra eliminado"
+                }
+
+        "500":
+          description: Internal Error Server
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Ocurrió un error"
+                }
+
+components:
+  schemas:
+    Products:
+      type: object
+      properties:
+        id:
+          type: ObjectId
+          required: true
+        title:
+          type: String
+          required: true
+        description:
+          type: String
+          required: true
+        code:
+          type: String
+          required: true
+          unique: true
+        price:
+          type: Number
+          required: true
+        stock:
+          type: Number
+          required: true
+        thumbnail:
+          type: String
+          required: true
+        enable:
+          type: Boolean
+          default: true

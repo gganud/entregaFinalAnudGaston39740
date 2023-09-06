@@ -1,0 +1,795 @@
+paths:
+  /api/carts/:
+    post:
+      summary: Create Cart
+      tags:
+        - Carts
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              example:
+                {
+                  "userId": "643c0c7701d8fb15b03506ff",
+                }
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              example:
+                {
+                  "status": "success",
+                  "payload": {
+                    "idCart": "64c3307aeefd1ce9078174e8",
+                    "userId": "64c3307ae42398472839383a",
+                    "products": []
+                  },
+                  "message": "Cart created.",
+                }
+        
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              example:
+                {
+                  "errors": [
+                    {
+                      "value": "643c0c7701d8fb15b03506ffa",
+                      "message": "No es un id valido",
+                      "param": "userId",
+                      "location": "Request Body"
+                    }
+                  ]
+                }
+
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Empty authentication header!"
+                }
+        
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "Authentication error"
+                }
+
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "El usuario con el id 645ee28b63c3491089e690c7 no existe o se encuentra eliminado"
+                }
+
+        "500":
+          description: Internal Error Server
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Ocurrió un error"
+                }
+
+  /api/carts/{userId}:
+    get:
+      summary: Get Cart by User Id
+      tags:
+        - Carts
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Id to find
+          schema:
+            $type: ObjectId
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#components/schemas/Carts'
+              example:
+                {
+                  "cartId": "64c3307aeefd1ce9078174e8",
+                  "userId": 
+                    {"_id": "64c3307ae42398472839383a",
+                      "email": "user@user.com"
+                    },
+                  "products": [
+                    {"product": {
+                      "id": "643c0c7701d8fb15b03506ff",
+                      "title": "producto prueba modificado",
+                      "description": "Este es un producto prueba modificado",
+                      "code": "aaa1",
+                      "price": 50,
+                      "stock": 10,
+                      "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACoSURBVCjPY/jPAIMMCgxmYKiAEAOKwhmMDGZ//v/5/+M/qhI0BW/+gxQBlTDiUPDl/3v8Cn7//4VfwR/cVkB8kfI27S0WR+7rm/ui70X7i9YX88O7whtflANh7ouUPqgCBsbZLyBGAq1hRLBiX4BZiODBxgIpgAWPOYM/BgukGCl4En9jsswYkIIHKIzBgiiABg9QGINlxoAUPEBhDJYZwhdmDDZYWAoAtTEEdnXdy7IAAAAASUVORK5CYII=",
+                      "enable": true,
+                    },
+                      "quantity" : 2,
+                    } 
+                  ]
+                }
+
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              example:
+                {
+                  "errors": [
+                    {
+                      "value": "643c0c7701d8fb15b03506ffa",
+                      "msg": "No es un id valido",
+                      "param": "userId",
+                      "location": "params"
+                    }
+                  ]
+                }
+
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Empty authentication header!"
+                }
+        
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "Authentication error"
+                }
+
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "El carrito de compra con el id 64accd743160ce667aa70c1b no existe"
+                }
+        "500":
+          description: Internal Error Server
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Ocurrió un error"
+                }
+
+  /api/carts/{cid}:
+    put:
+      summary: Updated Cart By Id
+      tags:
+        - Carts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id to updated
+          schema:
+            $type: ObjectId
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              example:
+                  [
+                    {
+                      "product": "644ab97a97f88b1c6448a044",
+                      "quantity": 1
+                    },
+                    {
+                      "product": "643c0c0801d8fb15b03506fa",
+                      "quantity": 120
+                    }
+                  ]
+                
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#components/schemas/Carts'
+              example:
+                {
+                  "cartId": "64c3307aeefd1ce9078174e8",
+                  "userId": 
+                    {"_id": "64c3307ae42398472839383a",
+                      "email": "user@user.com"
+                    },
+                  "products": [
+                    {"product": {
+                      "id": "644ab97a97f88b1c6448a044",
+                      "title": "producto prueba modificado",
+                      "description": "Este es un producto prueba modificado",
+                      "code": "aaa1",
+                      "price": 50,
+                      "stock": 10,
+                      "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACoSURBVCjPY/jPAIMMCgxmYKiAEAOKwhmMDGZ//v/5/+M/qhI0BW/+gxQBlTDiUPDl/3v8Cn7//4VfwR/cVkB8kfI27S0WR+7rm/ui70X7i9YX88O7whtflANh7ouUPqgCBsbZLyBGAq1hRLBiX4BZiODBxgIpgAWPOYM/BgukGCl4En9jsswYkIIHKIzBgiiABg9QGINlxoAUPEBhDJYZwhdmDDZYWAoAtTEEdnXdy7IAAAAASUVORK5CYII=",
+                      "enable": true,
+                    },
+                      "quantity" : 1,
+                    },
+                    {"product": {
+                      "id": "643c0c0801d8fb15b03506fa",
+                      "title": "producto prueba modificado2",
+                      "description": "Este es un producto prueba modificado2",
+                      "code": "aaa1",
+                      "price": 50,
+                      "stock": 10,
+                      "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACoSURBVCjPY/jPAIMMCgxmYKiAEAOKwhmMDGZ//v/5/+M/qhI0BW/+gxQBlTDiUPDl/3v8Cn7//4VfwR/cVkB8kfI27S0WR+7rm/ui70X7i9YX88O7whtflANh7ouUPqgCBsbZLyBGAq1hRLBiX4BZiODBxgIpgAWPOYM/BgukGCl4En9jsswYkIIHKIzBgiiABg9QGINlxoAUPEBhDJYZwhdmDDZYWAoAtTEEdnXdy7IAAAAASUVORK5CYII=",
+                      "enable": true,
+                    },
+                      "quantity" : 120,
+                    },
+                  ]
+                }
+
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              example:
+                {
+                  "errors": [
+                    {
+                      "value": "643c0c7701d8fb15b03506ffa",
+                      "msg": "No es un id valido",
+                      "param": "cid",
+                      "location": "params"
+                    }
+                  ]
+                }
+
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Empty authentication header!"
+                }
+        
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "Authentication error"
+                }
+
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "El producto con el id 645ee28b63c3491089e690c7 no existe o se encuentra eliminado"
+                }
+        "500":
+          description: Internal Error Server
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Ocurrió un error"
+                }
+
+    delete:
+      summary: Delete Cart By Id
+      tags:
+        - Carts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id Cart to delete
+          schema:
+            $type: ObjectId
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#components/schemas/Carts'
+              example:
+                {
+                  "status": "success",
+                  "payload": {
+                    "idCart": "64c3307aeefd1ce9078174e8",
+                    "userId": "64c3307ae42398472839383a",
+                    "products": []
+                  },
+                  "message": "Cart empty.",
+                }
+
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              example:
+                {
+                  "errors": [
+                    {
+                      "value": "643c0c7701d8fb15b03506ffa",
+                      "msg": "No es un id valido",
+                      "param": "cid",
+                      "location": "params"
+                    }
+                  ]
+                }
+
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Empty authentication header!"
+                }
+        
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "Authentication error"
+                }
+
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "El carro con el id 645ee28b63c3491089e690c7 no existe o se encuentra eliminado"
+                }
+
+        "500":
+          description: Internal Error Server
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Ocurrió un error"
+                }
+
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Add Product in Cart
+      tags:
+        - Carts
+      parameters:
+        - name: id cart
+          in: path
+          required: true
+          description: Cart Id
+          schema:
+            $type: ObjectId
+        - name: id product
+          in: path
+          required: true
+          description: Product Id
+          schema:
+            $type: ObjectId
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#components/schemas/Carts'
+              example:
+                {
+                  "status": "success",
+                  "payload": {
+                    "idCart": "64c3307aeefd1ce9078174e8",
+                    "userId": "64c3307ae42398472839383a",
+                    "products": [
+                      {
+                        "product": "643c0c7701d8fb15b03506ff",
+                        "quantity": 1
+                      },
+                      {
+                        "product": "644ab97197f88b1c6448a040",
+                        "quantity": 10
+                      },
+                      {
+                        "product": "644ab97a97f88b1c6448a044",
+                        "quantity": 2
+                      },
+                    ]
+                  },
+                  "message": "Product added."
+                }
+
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              example:
+                {
+                  "errors": [
+                    {
+                      "value": "643c0c7701d8fb15b03506ffa",
+                      "msg": "No es un id valido",
+                      "param": "cid",
+                      "location": "params"
+                    }
+                  ]
+                }
+        
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Empty authentication header!"
+                }
+        
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "Authentication error"
+                }
+
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              example:
+                  [
+                    "error": "El carro con el id 645ee28b63c3491089e690c7 no existe o se encuentra eliminado",
+                    "error": "El producto con el id 645ee28b63c3491089e690c7 no existe o se encuentra eliminado"
+                  ]
+
+        "500":
+          description: Internal Error Server
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Ocurrió un error"
+                }
+
+    put:
+      summary: Updated Product in cart
+      tags:
+        - Carts
+      parameters:
+        - name: id cart
+          in: path
+          required: true
+          description: Cart Id
+          schema:
+            $type: ObjectId
+        - name: id product
+          in: path
+          required: true
+          description: Product Id
+          schema:
+            $type: ObjectId
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              example:
+                {
+                  "quantity": 15
+                }
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#components/schemas/Carts'
+              example:
+                {
+                  "status": "success",
+                  "payload": {
+                    "idCart": "64c3307aeefd1ce9078174e8",
+                    "userId": "64c3307ae42398472839383a",
+                    "products": [
+                      {
+                        "id": "643c0c7701d8fb15b03506ff",
+                        "quantity": 1
+                      },
+                    ]
+                  },
+                  "message": "Product updated."
+                }
+
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              example:
+                {
+                  "errors": [
+                    {
+                      "value": "643c0c7701d8fb15b03506ffa",
+                      "msg": "No es un id valido",
+                      "param": "cid",
+                      "location": "params"
+                    }
+                  ]
+                }
+        
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Empty authentication header!"
+                }
+        
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "Authentication error"
+                }
+
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              example:
+                  [
+                    "error": "El carro con el id 645ee28b63c3491089e690c7 no existe o se encuentra eliminado",
+                    "error": "El producto con el id 645ee28b63c3491089e690c7 no existe o se encuentra eliminado"
+                  ]
+
+        "500":
+          description: Internal Error Server
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Ocurrió un error"
+                }
+
+    delete:
+      summary: Delete Product in cart
+      tags:
+        - Carts
+      parameters:
+        - name: id cart
+          in: path
+          required: true
+          description: Cart Id
+          schema:
+            $type: ObjectId
+        - name: id product
+          in: path
+          required: true
+          description: Product Id
+          schema:
+            $type: ObjectId
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#components/schemas/Carts'
+              example:
+                {
+                  "status": "success",
+                  "payload": {
+                    "idCart": "64c3307aeefd1ce9078174e8",
+                    "userId": "64c3307ae42398472839383a",
+                    "products": [
+                      {
+                        "id": "643c0c7701d8fb15b03506ff",
+                        "quantity": 1
+                      },
+                    ]
+                  },
+                  "message": "Product deleted."
+                }
+
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              example:
+                {
+                  "errors": [
+                    {
+                      "value": "643c0c7701d8fb15b03506ffa",
+                      "msg": "No es un id valido",
+                      "param": "cid",
+                      "location": "params"
+                    }
+                  ]
+                }
+        
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Empty authentication header!"
+                }
+        
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "Authentication error"
+                }
+
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              example:
+                  [
+                    "error": "El carro con el id 645ee28b63c3491089e690c7 no existe o se encuentra eliminado",
+                    "error": "El producto con el id 645ee28b63c3491089e690c7 no existe o se encuentra eliminado"
+                  ]
+
+        "500":
+          description: Internal Error Server
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Ocurrió un error"
+                }
+
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Order created
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Cart Id
+          schema:
+            $type: ObjectId
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              example:
+                {
+                  "status": "success",
+                  "payload": {
+                    "code": "UYrd4bZOMz3fObn2Y_1Sg",
+                    "purchase_datetime": "2023-07-30T21:53:54.881Z",
+                    "amount": 933,
+                    "purchaser": "user@user.com",
+                    "products": [
+                        {
+                            "id": "644ed455db0ad4a735cbb46d",
+                            "title": "Gone Baby Gone",
+                            "price": 310,
+                            "quantity": 2
+                        },
+                        {
+                            "id": "644ed455db0ad4a735cbb4e9",
+                            "title": "Sentimental Swordsman, The (To ching chien ko wu ching chien)",
+                            "price": 313,
+                            "quantity": 1
+                        }
+                    ]
+                },
+                  "message": "Compra finalizada.",
+                }
+        
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              example:
+                {
+                  "errors": [
+                    {
+                      "value": "643c0c7701d8fb15b03506ffa",
+                      "message": "No es un id valido",
+                      "param": "cid",
+                      "location": "Request Body"
+                    }
+                  ]
+                }
+
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Empty authentication header!"
+                }
+        
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "Authentication error"
+                }
+
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              example:
+                {
+                  "error": "El carro con el id 645ee28b63c3491089e690c7 no existe o se encuentra eliminado"
+                }
+
+        "500":
+          description: Internal Error Server
+          content:
+            application/json:
+              example:
+                {
+                  "message": "Ocurrió un error"
+                }
+    
+components:
+  schemas:
+    Carts:
+      type: object
+      properties:
+        cartId:
+          type: ObjectId
+        userId:
+          type: ObjectId
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                $ref: '#/components/schemas/Products'
+              quantity: 
+                type: Number
