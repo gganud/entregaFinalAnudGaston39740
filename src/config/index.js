@@ -3,7 +3,7 @@ dotenv.config();
 
 const config = {
     env: process.env.NODE_ENV,
-    port: process.env.NODE_PORT,
+    port: process.env.PORT,
     db: process.env.MONGO_DB,
     dbUri: process.env.MONGO_DB_URI,
     dbUriTests: process.env.MONGO_DB_URI2,
