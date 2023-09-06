@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
+    "start": "node ./src/index.js",
     "command": "node src/command.js",
     "test": "mocha --timeout 10000 src/tests/*.test.js",
     "lint-fix": "eslint -c .eslintrc ./src --fix",
