@@ -19,6 +19,7 @@ import paymentRouter from '../routes/paymentRoute.js';
 import loggerTestRouter from '../routes/loggerTestRouter.js';
 import { logger } from '../middlewares/logger.js';
 import errorHandler from '../middlewares/errorHandler.js';
+import notFound from '../middlewares/notFound.js';
 import pinoLogger from '../../config/pinoLoggerConfig.js';
 
 const PORT = config.port || 8000;
@@ -69,8 +70,12 @@ class AppExpress
 
         // Docs
         this.app.use('/api/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs, options));
+
         // ErrorHandler
         this.app.use(errorHandler);
+
+        // 404
+        this.app.all('*', notFound);
     }
 
     callback()
