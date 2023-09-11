@@ -7,10 +7,10 @@ const roleRouter = Router();
 
 roleRouter.use(auth);
 
-roleRouter.get('/', authorization('getRoles'), RoleController.list);
-roleRouter.get('/:id', authorization('getRole'), RoleController.getOne);
-roleRouter.post('/', authorization('saveRole'), RoleController.save);
-roleRouter.put('/:id', authorization('updateRole'), RoleController.update);
-roleRouter.delete('/:id', authorization('deleteRole'), RoleController.deleteOne);
+roleRouter.get('/', authorization('readRoles'), RoleController.list); // Obtiene los roles de los usuarios
+roleRouter.get('/:id', authorization('readRole'), RoleController.getOne); // Obtiene un rol dado su id
+roleRouter.post('/', authorization('saveRole'), RoleController.save); // Crea un rol
+roleRouter.put('/:id', authorization('updateRole'), RoleController.update); // Actualiza algun campo/campos de un rol dado su id
+roleRouter.delete('/:id', authorization('deleteRole'), RoleController.deleteOne); // Elimina un rol (bajada logica) dado su id
 
 export default roleRouter;

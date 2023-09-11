@@ -1,17 +1,17 @@
 import Stripe from 'stripe';
-import container from '../../container.js';
 import config from '../../config/index.js';
+import TicketManager from './ticketManager.js';
 
 class PaymentManager
 {
   constructor()
   {
-    this.ticketRepository = container.resolve('TicketRepository');
+    this.ticketManager = new TicketManager();
     this.stripe = new Stripe(config.stripeKey);
   }
   async payTicket({ id, amount, currency = 'usd', purchaser })
   {
-    const ticket = await this.ticketRepository.getOne(id);
+    const ticket = this.ticketManager.getOne(id);
     if (ticket.orderCompleted === true)
     {
       throw new Error('Order is already paid');
@@ -25,7 +25,11 @@ class PaymentManager
       payment_method: 'pm_card_visa'
     });
 
-    return paymentIntent;
+    return (
+    {
+      clientSecret: paymentIntent.client_secret,
+      ticket
+    });
   }
 }
 export default PaymentManager;

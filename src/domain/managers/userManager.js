@@ -10,58 +10,82 @@ import RoleManager from './roleManager.js';
 class UserManager
 {
   constructor()
-{
+  {
     this.userRepository = container.resolve('UserRepository');
     this.roleManager = new RoleManager();
     this.emailManager = new EmailManager();
   }
 
   async paginate(criteria)
-{
+  {
     return this.userRepository.paginate(criteria);
   }
 
   async getOneByEmail(email)
-{
+  {
     await emailValidation.parseAsync({ email });
-    return this.userRepository.getOneByEmail(email);
+    const user = this.userRepository.getOneByEmail(email);
+    if (Object.keys(user).length === 0 && user.constructor === Object)
+    {
+      return 'User dont exist.';
+    }
+    return { ...user, password: undefined };
   }
 
   async getOne(id)
-{
+  {
     await idValidation.parseAsync({ id });
-    return this.userRepository.getOne(id);
+    const user = this.userRepository.getOne(id);
+    if (Object.keys(user).length === 0 && user.constructor === Object)
+    {
+      return 'User dont exist.';
+    }
+    return { ...user, password: undefined };
   }
 
   async create(data)
-{
+  {
     await userCreateValidation.parseAsync(data);
-    const dto = {
+    const userExists = this.userRepository.getOneByEmail(data.email);
+    if (userExists)
+    {
+      return 'User already exists.';
+    }
+    let roleDocument = this.roleManager.getRoleByName(data.role);
+    if (roleDocument == null)
+    {
+      roleDocument = this.roleManager.getRoleByName('client');
+    }
+    const dto =
+    {
       ...data,
-      password: await Hash.createHash(data.password)
+      password: await Hash.createHash(data.password),
+      role: roleDocument
     };
-    const user = await this.userRepository.create(dto);
+    const user = this.userRepository.create(dto);
     return { ...user, password: undefined };
   }
 
   async updateOne(id, data)
-{
+  {
     await userUpdateValidation.parseAsync({ ...data, id });
-    return this.userRepository.updateOne(id, data);
+    const user = this.userRepository.updateOne(id, data);
+    if (Object.keys(user).length === 0 && user.constructor === Object)
+    {
+      return 'User dont exist.';
+    }
+    return { ...user, password: undefined };
   }
 
   async deleteOne(id)
-{
-    await idValidation.parseAsync({ id });
-    return this.userRepository.deleteOne(id);
-  }
-
-  async forgotPassword(dto)
   {
-    const user = await this.userRepository.getOneByEmail(dto.email);
-    user.password = dto.password;
-
-    return this.userRepository.updateOne(user.id, user);
+    await idValidation.parseAsync({ id });
+    const user = this.userRepository.deleteOne(id);
+    if (Object.keys(user).length === 0 && user.constructor === Object)
+    {
+      return 'User dont exist.';
+    }
+    return { ...user, password: undefined };
   }
 
   async uploadDocuments(id, files)
@@ -82,7 +106,12 @@ class UserManager
     });
 
     await idValidation.parseAsync(id);
-    return this.userRepository.updateOne(id, { documents: docToUpdate });
+    const user = this.userRepository.updateOne(id, { documents: docToUpdate });
+    if (Object.keys(user).length === 0 && user.constructor === Object)
+    {
+      return 'User dont exist.';
+    }
+    return { ...user, password: undefined };
   }
 
   async setPremiumUser(id)
@@ -99,9 +128,9 @@ class UserManager
       throw new Error('Roles not found');
     }
     const user = await this.userRepository.getUserById(id);
-    if (!user)
+    if (Object.keys(user).length === 0 && user.constructor === Object)
     {
-      throw new Error('User not found');
+      return 'User dont exist.';
     }
 
     let newRoleId;
@@ -123,14 +152,14 @@ class UserManager
       newRoleId = clientRole.id;
     }
     const userUpdated = await this.userRepository.updateUser(id, { role: newRoleId });
-    return userUpdated;
+    return { ...userUpdated, password: undefined };
   }
 
   async disableInactiveUsers()
   {
     try
     {
-      const { users } = await this.userRepository.paginate({ paginate: false });
+      const { users } = await this.userRepository.paginate();
       const now = new Date();
       const twoDaysInMillis = 2 * 24 * 60 * 60 * 1000;
       const inactiveUsers = [];
@@ -142,7 +171,7 @@ class UserManager
           if (now.getTime() - lastConnectionTime > twoDaysInMillis && user.status !== false)
           {
             inactiveUsers.push({ id: user.id });
-            const sendMailInactive = await this.emailManager.emailInactive(user.email);
+            const sendMailInactive = await this.emailManager.send(user, 'mailInactiveUserTemplate.hbs', 'Usuario dado de baja por falta de actividad');
             if (!sendMailInactive)
             {
               throw new Error('Error sending mail');

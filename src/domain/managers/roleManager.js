@@ -18,12 +18,22 @@ class RoleManager
   async getOne(id)
 {
     await idValidation.parseAsync({ id });
-    return this.roleRepository.getOne(id);
+    const role = this.roleRepository.getOne(id);
+    if (Object.keys(role).length === 0 && role.constructor === Object)
+        {
+            return 'Role dont exist.';
+        }
+    return role;
   }
 
   async getRoleByName(roleName)
   {
-    return this.roleRepository.getOne(roleName);
+    const role = this.roleRepository.getOne(roleName);
+    if (Object.keys(role).length === 0 && role.constructor === Object)
+        {
+            return 'Role dont exist.';
+        }
+    return role;
   }
 
   async create(data)
@@ -35,13 +45,23 @@ class RoleManager
   async updateOne(id, data)
 {
     await roleUpdateValidation.parseAsync({ ...data, id });
-    return this.roleRepository.updateOne(id, data);
+    const role = this.roleRepository.updateOne(id, data);
+    if (Object.keys(role).length === 0 && role.constructor === Object)
+        {
+            return 'Role dont exist.';
+        }
+    return role;
   }
 
   async deleteOne(id)
 {
     await idValidation.parseAsync({ id });
-    return this.roleRepository.deleteOne(id);
+    const role = this.roleRepository.deleteOne(id);
+    if (Object.keys(role).length === 0 && role.constructor === Object)
+        {
+            return 'Role dont exist.';
+        }
+    return role;
   }
 }
 

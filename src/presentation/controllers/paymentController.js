@@ -9,10 +9,9 @@ class PaymentController
     {
       const ticketManager = new TicketManager();
       const ticket = await ticketManager.getOne(req.params.ticketId);
-
       const paymentManager = new PaymentManager();
       const payTicket = await paymentManager.payTicket(ticket);
-      if (!payTicket.status === 'succeeded')
+      if (!payTicket)
       {
         return res.status(400).send({ status: 'failed', payload: payTicket.status });
       }

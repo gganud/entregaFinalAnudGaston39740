@@ -1,3 +1,4 @@
+import config from '../../config/index.js';
 import container from '../../container.js';
 import Hash from '../../shared/bcrypt.js';
 import TokenJWT from '../../shared/token.js';
@@ -12,6 +13,7 @@ class SessionManager
   constructor()
   {
     this.userRepository = container.resolve('UserRepository');
+    this.roleRepository = container.resolve('RoleRepository');
     this.emailManager = new EmailManager();
   }
 
@@ -35,9 +37,16 @@ class SessionManager
   async signup(payload)
   {
     await userCreateValidation.parseAsync(payload);
+    const userExists = this.userRepository.getOneByEmail(payload.email);
+    if (userExists)
+    {
+      return 'User already exists.';
+    }
+    const role = await this.roleRepository.getRoleByName('client');
     const dto = {
       ...payload,
-      password: await Hash.createHash(payload.password)
+      password: await Hash.createHash(payload.password),
+      role
     };
     const user  = await this.userRepository.create(dto);
     return { ...user, password: undefined };
@@ -59,7 +68,13 @@ class SessionManager
       throw new Error('User not found');
     }
     const token = await TokenJWT.generate(user, '10m');
-    const sendMail = await this.emailManager.emailPassword(token, email);
+    const data =
+    {
+      token,
+      email
+    };
+    Object.assign(data, { url: config.frontUrl });
+    const sendMail = await this.emailManager.send(data, 'mailForgotPasswordTemplate.hbs', 'Cambio de contraseña');
     if (!sendMail)
     {
       throw new Error('Error sending mail');
@@ -80,7 +95,7 @@ class SessionManager
     {
       throw new Error('Error updating password');
     }
-    const sendMailConfirmation = await this.emailManager.emailPasswordChanged(user);
+    const sendMailConfirmation = await this.emailManager.send(user, 'mailPasswordChangedTemplate.hbs', 'Contraseña cambiada exitosamente');
     if (!sendMailConfirmation)
     {
       throw new Error('Error sending mail');
@@ -88,8 +103,9 @@ class SessionManager
     return result;
   }
 
-  async changePassword(data, user)
+  async changePassword(data)
   {
+    const { user } = await TokenJWT.decode(data.token);
     const { password } = await this.userRepository.getOneByEmail(user.email);
     const isHashedPassword = await Hash.isValidPassword(data.oldPassword, password);
     if (data.password !== data.passwordConfirmation)
@@ -110,7 +126,7 @@ class SessionManager
     {
       throw new Error('Error updating password');
     }
-    const sendMailConfirmation = await this.emailManager.emailPasswordChanged(user);
+    const sendMailConfirmation = await this.emailManager.send(user, 'mailPasswordChangedTemplate.hbs', 'Contraseña cambiada exitosamente');
     if (!sendMailConfirmation)
     {
       throw new Error('Error sending mail');

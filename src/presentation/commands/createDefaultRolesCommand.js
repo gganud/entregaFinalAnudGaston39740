@@ -14,12 +14,51 @@ const createDefaultRolesCommand = new Command('createDefaultRoles')
       const clientRole =
       {
         name: 'client',
-        permissions: ['readUsers', 'readRoles']
+        permissions:
+        [
+          'createCart',
+          'getCartByUserId',
+          'addProductByCartId',
+          'deleteProductInCart',
+          'deleteCart',
+          'updateCart',
+          'updateProductByCartId',
+          'checkout',
+          'getUserById',
+          'getUserByEmail',
+          'updateUser',
+          'deleteUser',
+          'updateRoleUser',
+          'uploadFiles',
+          'readRole',
+          'payOrder'
+        ]
       };
       const premiumRole =
       {
         name: 'premium',
-        permissions: ['readUsers', 'readRoles', 'createProduct', 'updateProduct', 'deleteProduct']
+        permissions:
+        [
+          'createProduct',
+          'updateProduct',
+          'deleteProduct',
+          'createCart',
+          'getCartByUserId',
+          'addProductByCartId',
+          'deleteProductInCart',
+          'deleteCart',
+          'updateCart',
+          'updateProductByCartId',
+          'checkout',
+          'getUserById',
+          'getUserByEmail',
+          'updateUser',
+          'deleteUser',
+          'updateRoleUser',
+          'uploadFiles',
+          'readRole',
+          'payOrder'
+        ]
       };
       await manager.create(clientRole);
       await manager.create(premiumRole);

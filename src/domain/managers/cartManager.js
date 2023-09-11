@@ -14,7 +14,12 @@ class CartManager
     async getCart(userId)
     {
         await idValidation.parseAsync(userId);
-        return this.cartRepository.getOneCart(userId);
+        const cart = this.cartRepository.getOneCart(userId);
+        if (Object.keys(cart).length === 0 && cart.constructor === Object)
+        {
+            return 'Cart dont exist.';
+        }
+        return cart;
     }
 
     async addCart(cart)
@@ -30,38 +35,68 @@ class CartManager
         {
             throw new Error('El producto pertenece al usuario.');
         }
-        return this.cartRepository.addProductToCart(idC, idP);
+        const cart =  this.cartRepository.addProductToCart(idC, idP);
+        if (Object.keys(cart).length === 0 && cart.constructor === Object)
+        {
+            return 'Cart dont exist.';
+        }
+        return cart;
     }
 
     async deleteProducts(idC)
     {
         await idValidation.parseAsync(idC);
-        return this.cartRepository.deleteProducts(idC);
+        const cart = this.cartRepository.deleteProducts(idC);
+        if (Object.keys(cart).length === 0 && cart.constructor === Object)
+        {
+            return 'Cart dont exist.';
+        }
+        return cart;
     }
 
     async deleteProduct(idC, idP)
     {
         await idValidation.parseAsync(idC, idP);
-        return this.cartRepository.deleteProduct(idC, idP);
+        const cart = this.cartRepository.deleteProduct(idC, idP);
+        if (Object.keys(cart).length === 0 && cart.constructor === Object)
+        {
+            return 'Cart dont exist.';
+        }
+        return cart;
     }
 
     async updateProduct(quantity, idC, idP)
     {
         await quantityValidation.parseAsync({ quantity });
         await idValidation.parseAsync(idC, idP);
-        return this.cartRepository.updateProduct(quantity, idC, idP);
+        const cart = this.cartRepository.updateProduct(quantity, idC, idP);
+        if (Object.keys(cart).length === 0 && cart.constructor === Object)
+        {
+            return 'Cart dont exist.';
+        }
+        return cart;
     }
 
     async updateCart(products, idC)
     {
         await idValidation.parseAsync(idC);
-        return this.cartRepository.updateProducts(products, idC);
+        const cart = this.cartRepository.updateProducts(products, idC);
+        if (Object.keys(cart).length === 0 && cart.constructor === Object)
+        {
+            return 'Cart dont exist.';
+        }
+        return cart;
     }
 
     async productsInCart(idC)
     {
         await idValidation.parseAsync(idC);
-        return await this.cartRepository.productsInCart(idC);
+        const cart = this.cartRepository.productsInCart(idC);
+        if (Object.keys(cart).length === 0 && cart.constructor === Object)
+        {
+            return 'Cart dont exist.';
+        }
+        return cart;
     }
 }
 

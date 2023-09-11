@@ -3,18 +3,37 @@ import Role from '../../../domain/entities/role.js';
 
 class RoleMongooseRepository
 {
+  #roleInfo(data)
+    {
+        const emptyDocument = {};
+        const document = {
+          id: data._id,
+          name: data.name,
+          permissions: data.permissions
+        };
+        if (!data)
+        {
+            return emptyDocument;
+        }
+        if (Array.isArray(data))
+        {
+            return data.map(document => new Role(document));
+        }
+        return new Role (document);
+    }
+
   async paginate(criteria)
   {
     const { limit, page } = criteria;
-    const roleDocuments = limit == undefined ? await roleSchema.paginate({}, { page }) : await roleSchema.paginate({}, { limit, page });
+    const paginateOptions =
+    {
+        page: page || 1,
+        limit: limit || 10
+    };
+    const roleDocuments = await roleSchema.paginate(paginateOptions);
     const { docs, ...pagination } = roleDocuments;
 
-    const roles = docs.map(document => new Role({
-      id: document._id,
-      name: document.name,
-      permissions: document.permissions
-    }
-    ));
+    const roles = this.#roleInfo(docs);
     return {
       roles,
       pagination
@@ -24,64 +43,32 @@ class RoleMongooseRepository
   async getOne(id)
   {
     const roleDocument = await roleSchema.findOne({ _id: id });
-
-    if (!roleDocument)
-    {
-      throw new Error('Role dont exist.');
-    }
-
-    return new Role({
-        id: roleDocument?._id,
-        name: roleDocument?.name,
-        permissions: roleDocument?.permissions
-    });
+    return this.#roleInfo(roleDocument);
   }
 
   async getRoleByName(roleName)
   {
     const roleDocument = await roleSchema.findOne({ name: roleName });
-    if (!roleDocument)
-    {
-      throw new Error('Role not found.');
-    }
-
-    return new Role({
-      id: roleDocument?._id,
-      name: roleDocument?.name,
-      permissions: roleDocument?.permissions
-    });
+    return this.#roleInfo(roleDocument);
   }
 
   async create(data)
   {
     const roleDocument = await roleSchema.create(data);
 
-    return new Role({
-        id: roleDocument._id,
-        name: roleDocument.name,
-        permissions: roleDocument.permissions
-    });
+    return this.#roleInfo(roleDocument);
   }
 
   async updateOne(id, data)
   {
     const roleDocument = await roleSchema.findOneAndUpdate({ _id: id }, data, { new: true });
-
-    if (!roleDocument)
-    {
-      throw new Error('Role dont exist.');
-    }
-
-    return new Role({
-        id: roleDocument._id,
-        name: roleDocument.name,
-        permissions: roleDocument.permissions
-    });
+    return this.#roleInfo(roleDocument);
   }
 
   async deleteOne(id)
   {
-    return roleSchema.deleteOne({ _id: id });
+    const roleDocument = await roleSchema.findOneAndUpdate({ _id: id }, { enable: false });
+    return this.#roleInfo(roleDocument);
   }
 }
 

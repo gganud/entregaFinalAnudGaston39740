@@ -7,8 +7,7 @@ class ProductController
         try
 {
             const productManager = new ProductManager();
-            const { limit, page, inStock, sort } = req.query;
-            const productList = await productManager.listProducts({ limit, page, inStock, sort });
+            const productList = await productManager.listProducts(req.query);
             res.status(200).send({ status: 'success', payload: productList });
         }
         catch (e)

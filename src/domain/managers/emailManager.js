@@ -1,85 +1,39 @@
-import MailService from '../../shared/mailService.js';
+import nodemailer from 'nodemailer';
 import config from '../../config/index.js';
-import mailTicketTemplate from '../../presentation/templates/mailTicketTemplate.js';
-import mailPayConfirmationTemplate from '../../presentation/templates/mailPayConfirmationTemplate.js';
-import mailPasswordTemplate from '../../presentation/templates/mailPasswordTemplate.js';
-import mailPasswordChangedTemplate from '../../presentation/templates/mailPasswordChangedTemplate.js';
-import productDeletedTemplate from '../../presentation/templates/productDeletedTemplate.js';
-import inactiveTemplate from '../../presentation/templates/inactiveTemplate.js';
-
+import { resolve } from 'path';
+import fs from 'fs';
+import Handlebars from 'handlebars';
 
 class EmailManager
 {
-    async emailTicket(ticket)
+    constructor()
     {
-        const mailContent = mailTicketTemplate(ticket);
-        const mail = {
-            from : config.mail,
-            to: ticket.purchaser,
-            subject: 'Ticket de compra',
-            html: mailContent
+        this.templatesEngine = Handlebars;
+        this.smtp_config = {
+            service: 'gmail',
+            port: 587,
+            auth: {
+            user: config.mail,
+            pass: config.mailKey
+            },
+            secure: false
         };
-        return await MailService.sendMail(mail);
     }
 
-    async emailPayConfirmation(ticket)
+    async send(data, templateFile, subject)
     {
-        const mailContent = mailPayConfirmationTemplate(ticket);
-        const mail = {
+        const transport = nodemailer.createTransport(this.smtp_config);
+        const templatePath = resolve(`src/presentation/templates/${templateFile}`);
+        const source = fs.readFileSync(templatePath).toString();
+        const template = this.templatesEngine.compile(source);
+        const html = template(data);
+        const mailoptions = {
             from : config.mail,
-            to: ticket.purchaser,
-            subject: 'Confirmacion de pago',
-            html: mailContent
+            to: data.email,
+            subject,
+            html
         };
-        return await MailService.sendMail(mail);
-    }
-
-    async emailPassword(tokenPassword, email)
-    {
-        const mailContent = mailPasswordTemplate(tokenPassword, email);
-        const mail = {
-            from : config.mail,
-            to: email,
-            subject: 'Cambio de contraseña',
-            html: mailContent
-        };
-        return await MailService.sendMail(mail);
-    }
-
-    async emailPasswordChanged(user)
-    {
-        const mailContent = mailPasswordChangedTemplate(user);
-        const mail = {
-            from : config.mail,
-            to: user.email,
-            subject: 'Contraseña cambiada exitosamente',
-            html: mailContent
-        };
-        return await MailService.sendMail(mail);
-    }
-
-    async emailProductDeleted(email, product)
-    {
-        const mailContent = productDeletedTemplate(product);
-        const mail = {
-            from : config.mail,
-            to: email,
-            subject: 'Producto eliminado',
-            html: mailContent
-        };
-        return await MailService.sendMail(mail);
-    }
-
-    async emailInactive(email)
-    {
-        const mailContent = inactiveTemplate(email);
-        const mail = {
-            from : config.mail,
-            to: email,
-            subject: 'Usuario dado de baja por falta de actividad',
-            html: mailContent
-        };
-        return await MailService.sendMail(mail);
+        return await transport.sendMail(mailoptions);
     }
 }
 

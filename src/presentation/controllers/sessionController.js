@@ -85,8 +85,8 @@ class SessionController
     {
         try
         {
-            const { token, email } = req.params;
-            res.render('forgotPassword', { title: 'Forgot Password', token, email });
+            const { token } = req.query;
+            res.render('forgotPassword', { title: 'Forgot Password', token });
         }
         catch (e)
         {
@@ -99,8 +99,21 @@ class SessionController
         try
         {
             const manager = new SessionManager();
-            const user = await manager.forgotchangePassword(req.body);
+            await manager.forgotchangePassword(req.body);
             res.status(200).send({ status: 'success', message: 'Password changed successfully' });
+        }
+        catch (e)
+        {
+            next(e);
+        }
+    };
+
+    static changePasswordView = async(req, res, next) =>
+    {
+        try
+        {
+            const { token } = req.query;
+            res.render('resetPassword', { title: 'Change Password', token });
         }
         catch (e)
         {
@@ -113,7 +126,7 @@ class SessionController
         try
         {
             const manager = new SessionManager();
-            await manager.changePassword(req.body, req.user);
+            await manager.changePassword(req.body);
             res.status(200).send({ status: 'success', message: 'Password changed successfully' });
         }
         catch (e)

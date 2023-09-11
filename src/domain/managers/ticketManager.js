@@ -51,7 +51,7 @@ class TicketManager
             code: nanoid(),
             purchase_datetime: new Date(),
             amount,
-            purchaser: productsOrder.userId.email,
+            email: productsOrder.userId.email,
             products: productsOrder.products.map(item =>
             ({
                     id: item.product.id,
@@ -63,28 +63,37 @@ class TicketManager
         // Vacio carrito luego de emitir el ticket
         await this.cartManager.deleteProducts(productsOrder.idCart);
         // envio el ticket por mail.
-        const sendMailTicket = await this.emailManager.emailTicket(ticket);
+        const sendMailTicket = await this.emailManager.send(ticket, 'mailTicketTemplate.hbs', 'Ticket de compra');
         if (!sendMailTicket)
         {
             throw new Error('Error sending mail');
         }
-        return await this.ticketRepository.create(ticket);
+        return this.ticketRepository.create(ticket);
     }
 
     async getOne(idT)
     {
-        return await this.ticketRepository.getOne(idT);
+        const ticket = this.ticketRepository.getOne(idT);
+        if (Object.keys(ticket).length === 0 && ticket.constructor === Object)
+        {
+            return 'Ticket dont found.';
+        }
+        return ticket;
     }
 
-    async getAll(purchaser)
+    async getAll(criteria)
     {
-        return await this.ticketRepository.getAll(purchaser);
+        return this.ticketRepository.getAll(criteria);
     }
 
     async completeOrder(idT)
     {
-        const ticketUpdated = await this.ticketRepository.update(idT, { orderCompleted: true, orderCompleted_datetime: new Date() });
-        const sendMailTicket = await this.emailManager.emailPayConfirmation(ticketUpdated);
+        const ticketUpdated = this.ticketRepository.update(idT, { orderCompleted: true, orderCompleted_datetime: new Date() });
+        if (Object.keys(ticketUpdated).length === 0 && ticketUpdated.constructor === Object)
+        {
+            return 'Ticket dont found.';
+        }
+        const sendMailTicket = await this.emailManager.send(ticketUpdated, 'mailPayConfirmationTemplate.hbs', 'Confirmacion de pago');
         if (!sendMailTicket)
         {
             throw new Error('Error sending mail');
