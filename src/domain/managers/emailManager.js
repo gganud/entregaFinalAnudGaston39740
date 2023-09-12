@@ -9,7 +9,7 @@ class EmailManager
     constructor()
     {
         this.templatesEngine = Handlebars;
-        this.smtp_config = {
+        /* this.smtp_config = {
             service: 'gmail',
             port: 587,
             auth: {
@@ -17,6 +17,10 @@ class EmailManager
             pass: config.mailKey
             },
             secure: false
+        }; */
+        this.smtp_config = {
+            host: 'mail',
+            port: 1025
         };
     }
 

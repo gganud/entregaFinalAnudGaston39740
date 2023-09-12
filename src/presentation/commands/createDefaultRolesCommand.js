@@ -2,6 +2,7 @@ import { Command } from 'commander';
 
 import RoleManager from '../../domain/managers/roleManager.js';
 import pinoLogger from '../../config/pinoLogger.js';
+import defaultRoles from '../../config/index.js';
 
 const createDefaultRolesCommand = new Command('createDefaultRoles')
   .version('1.0.0')
@@ -11,54 +12,16 @@ const createDefaultRolesCommand = new Command('createDefaultRoles')
     try
     {
       const manager = new RoleManager();
+
       const clientRole =
       {
         name: 'client',
-        permissions:
-        [
-          'createCart',
-          'getCartByUserId',
-          'addProductByCartId',
-          'deleteProductInCart',
-          'deleteCart',
-          'updateCart',
-          'updateProductByCartId',
-          'checkout',
-          'getUserById',
-          'getUserByEmail',
-          'updateUser',
-          'deleteUser',
-          'updateRoleUser',
-          'uploadFiles',
-          'readRole',
-          'payOrder'
-        ]
+        permissions: defaultRoles.client
       };
       const premiumRole =
       {
         name: 'premium',
-        permissions:
-        [
-          'createProduct',
-          'updateProduct',
-          'deleteProduct',
-          'createCart',
-          'getCartByUserId',
-          'addProductByCartId',
-          'deleteProductInCart',
-          'deleteCart',
-          'updateCart',
-          'updateProductByCartId',
-          'checkout',
-          'getUserById',
-          'getUserByEmail',
-          'updateUser',
-          'deleteUser',
-          'updateRoleUser',
-          'uploadFiles',
-          'readRole',
-          'payOrder'
-        ]
+        permissions: defaultRoles.premium
       };
       await manager.create(clientRole);
       await manager.create(premiumRole);
