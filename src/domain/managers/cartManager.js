@@ -17,7 +17,7 @@ class CartManager
         const cart = this.cartRepository.getOneCart(userId);
         if (Object.keys(cart).length === 0 && cart.constructor === Object)
         {
-            return 'Cart dont exist.';
+            throw new Error ('Cart dont exist.');
         }
         return cart;
     }
@@ -38,7 +38,7 @@ class CartManager
         const cart =  this.cartRepository.addProductToCart(idC, idP);
         if (Object.keys(cart).length === 0 && cart.constructor === Object)
         {
-            return 'Cart dont exist.';
+            throw new Error ('Cart dont exist.');
         }
         return cart;
     }
@@ -49,7 +49,7 @@ class CartManager
         const cart = this.cartRepository.deleteProducts(idC);
         if (Object.keys(cart).length === 0 && cart.constructor === Object)
         {
-            return 'Cart dont exist.';
+            throw new Error ('Cart dont exist.');
         }
         return cart;
     }
@@ -60,7 +60,7 @@ class CartManager
         const cart = this.cartRepository.deleteProduct(idC, idP);
         if (Object.keys(cart).length === 0 && cart.constructor === Object)
         {
-            return 'Cart dont exist.';
+            throw new Error ('Cart dont exist.');
         }
         return cart;
     }
@@ -72,7 +72,7 @@ class CartManager
         const cart = this.cartRepository.updateProduct(quantity, idC, idP);
         if (Object.keys(cart).length === 0 && cart.constructor === Object)
         {
-            return 'Cart dont exist.';
+            throw new Error ('Cart dont exist.');
         }
         return cart;
     }
@@ -83,7 +83,7 @@ class CartManager
         const cart = this.cartRepository.updateProducts(products, idC);
         if (Object.keys(cart).length === 0 && cart.constructor === Object)
         {
-            return 'Cart dont exist.';
+            throw new Error ('Cart dont exist.');
         }
         return cart;
     }
@@ -94,7 +94,7 @@ class CartManager
         const cart = this.cartRepository.productsInCart(idC);
         if (Object.keys(cart).length === 0 && cart.constructor === Object)
         {
-            return 'Cart dont exist.';
+            throw new Error ('Cart dont exist.');
         }
         return cart;
     }

@@ -3,9 +3,13 @@ import User from '../../../domain/entities/user.js';
 
 class UserMongooseRepository
 {
-  #userInfo(data)
+  async #userInfo(data)
   {
     const emptyDocument = {};
+    if (!data)
+    {
+      return emptyDocument;
+    }
     const document =
     {
       id: data._id,
@@ -20,10 +24,6 @@ class UserMongooseRepository
       status: data.status,
       lastConnection: data.lastConnection
     };
-    if (!data)
-    {
-      return emptyDocument;
-    }
     if (Array.isArray(data))
     {
       return data.map(document => new User(document));

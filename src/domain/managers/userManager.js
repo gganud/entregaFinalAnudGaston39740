@@ -18,16 +18,16 @@ class UserManager
 
   async paginate(criteria)
   {
-    return this.userRepository.paginate(criteria);
+    return await this.userRepository.paginate(criteria);
   }
 
   async getOneByEmail(email)
   {
     await emailValidation.parseAsync({ email });
-    const user = this.userRepository.getOneByEmail(email);
+    const user = await this.userRepository.getOneByEmail(email);
     if (Object.keys(user).length === 0 && user.constructor === Object)
     {
-      return 'User dont exist.';
+      throw new Error ('User dont exist.');
     }
     return { ...user, password: undefined };
   }
@@ -35,10 +35,10 @@ class UserManager
   async getOne(id)
   {
     await idValidation.parseAsync({ id });
-    const user = this.userRepository.getOne(id);
+    const user = await this.userRepository.getOne(id);
     if (Object.keys(user).length === 0 && user.constructor === Object)
     {
-      return 'User dont exist.';
+      throw new Error ('User dont exist.');
     }
     return { ...user, password: undefined };
   }
@@ -46,12 +46,12 @@ class UserManager
   async create(data)
   {
     await userCreateValidation.parseAsync(data);
-    const userExists = this.userRepository.getOneByEmail(data.email);
+    const userExists = await this.userRepository.getOneByEmail(data.email);
     if (userExists)
     {
-      return 'User already exists.';
+      throw new Error ('User dont exist.');
     }
-    let roleDocument = this.roleManager.getRoleByName(data.role);
+    let roleDocument = await this.roleManager.getRoleByName(data.role);
     if (roleDocument == null)
     {
       roleDocument = this.roleManager.getRoleByName('client');
@@ -62,17 +62,17 @@ class UserManager
       password: await Hash.createHash(data.password),
       role: roleDocument
     };
-    const user = this.userRepository.create(dto);
+    const user = await this.userRepository.create(dto);
     return { ...user, password: undefined };
   }
 
   async updateOne(id, data)
   {
     await userUpdateValidation.parseAsync({ ...data, id });
-    const user = this.userRepository.updateOne(id, data);
+    const user = await this.userRepository.updateOne(id, data);
     if (Object.keys(user).length === 0 && user.constructor === Object)
     {
-      return 'User dont exist.';
+      throw new Error ('User dont exist.');
     }
     return { ...user, password: undefined };
   }
@@ -80,10 +80,10 @@ class UserManager
   async deleteOne(id)
   {
     await idValidation.parseAsync({ id });
-    const user = this.userRepository.deleteOne(id);
+    const user = await this.userRepository.deleteOne(id);
     if (Object.keys(user).length === 0 && user.constructor === Object)
     {
-      return 'User dont exist.';
+      throw new Error ('User dont exist.');
     }
     return { ...user, password: undefined };
   }
@@ -109,7 +109,7 @@ class UserManager
     const user = this.userRepository.updateOne(id, { documents: docToUpdate });
     if (Object.keys(user).length === 0 && user.constructor === Object)
     {
-      return 'User dont exist.';
+      throw new Error ('User dont exist.');
     }
     return { ...user, password: undefined };
   }
@@ -130,7 +130,7 @@ class UserManager
     const user = await this.userRepository.getUserById(id);
     if (Object.keys(user).length === 0 && user.constructor === Object)
     {
-      return 'User dont exist.';
+      throw new Error ('User dont exist.');
     }
 
     let newRoleId;

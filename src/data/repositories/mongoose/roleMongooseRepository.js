@@ -6,15 +6,15 @@ class RoleMongooseRepository
   #roleInfo(data)
     {
         const emptyDocument = {};
+        if (!data)
+        {
+            return emptyDocument;
+        }
         const document = {
           id: data._id,
           name: data.name,
           permissions: data.permissions
         };
-        if (!data)
-        {
-            return emptyDocument;
-        }
         if (Array.isArray(data))
         {
             return data.map(document => new Role(document));

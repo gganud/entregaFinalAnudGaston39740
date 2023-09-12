@@ -37,7 +37,7 @@ class SessionManager
   async signup(payload)
   {
     await userCreateValidation.parseAsync(payload);
-    const userExists = this.userRepository.getOneByEmail(payload.email);
+    const userExists = await this.userRepository.getOneByEmail(payload.email);
     if (userExists)
     {
       return 'User already exists.';
@@ -62,10 +62,9 @@ class SessionManager
   {
     await emailValidation.parseAsync({ email });
     const user = await this.userRepository.getOneByEmail(email);
-
-    if (!user.email)
+    if (Object.keys(user).length === 0 && user.constructor === Object)
     {
-      throw new Error('User not found');
+      throw new Error('User dont exist');
     }
     const token = await TokenJWT.generate(user, '10m');
     const data =

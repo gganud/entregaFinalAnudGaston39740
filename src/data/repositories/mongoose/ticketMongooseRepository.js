@@ -6,6 +6,10 @@ class TicketMongooseRepository
   #ticketInfo(data)
     {
         const emptyDocument = {};
+        if (!data)
+        {
+            return emptyDocument;
+        }
         const document = {
           id: data._id,
           code: data.code,
@@ -16,10 +20,6 @@ class TicketMongooseRepository
           orderCompleted: data.orderCompleted,
           orderCompleted_datetime: data.orderCompleted_datetime
         };
-        if (!data)
-        {
-            return emptyDocument;
-        }
         if (Array.isArray(data))
         {
             return data.map(document => new Ticket(document));

@@ -4,6 +4,7 @@ import container from '../../container.js';
 import ProductManager from './productManager.js';
 import EmailManager from './emailManager.js';
 import CartManager from './cartManager.js';
+import { error } from 'shelljs';
 
 class TicketManager
 {
@@ -68,30 +69,30 @@ class TicketManager
         {
             throw new Error('Error sending mail');
         }
-        return this.ticketRepository.create(ticket);
+        return await this.ticketRepository.create(ticket);
     }
 
     async getOne(idT)
     {
-        const ticket = this.ticketRepository.getOne(idT);
+        const ticket = await this.ticketRepository.getOne(idT);
         if (Object.keys(ticket).length === 0 && ticket.constructor === Object)
         {
-            return 'Ticket dont found.';
+            throw new Error ('Ticket dont found.');
         }
         return ticket;
     }
 
     async getAll(criteria)
     {
-        return this.ticketRepository.getAll(criteria);
+        return await this.ticketRepository.getAll(criteria);
     }
 
     async completeOrder(idT)
     {
-        const ticketUpdated = this.ticketRepository.update(idT, { orderCompleted: true, orderCompleted_datetime: new Date() });
+        const ticketUpdated = await this.ticketRepository.update(idT, { orderCompleted: true, orderCompleted_datetime: new Date() });
         if (Object.keys(ticketUpdated).length === 0 && ticketUpdated.constructor === Object)
         {
-            return 'Ticket dont found.';
+            throw new Error ('Ticket dont found.');
         }
         const sendMailTicket = await this.emailManager.send(ticketUpdated, 'mailPayConfirmationTemplate.hbs', 'Confirmacion de pago');
         if (!sendMailTicket)

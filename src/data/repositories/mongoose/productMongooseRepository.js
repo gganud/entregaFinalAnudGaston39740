@@ -5,6 +5,10 @@ class ProductMongooseRepository
     #productInfo(data)
     {
         const emptyDocument = {};
+        if (!data)
+        {
+            return emptyDocument;
+        }
         const document = {
             id: data._id,
             title: data.title,
@@ -16,10 +20,6 @@ class ProductMongooseRepository
             owner: data.owner,
             enable: data.enable
         };
-        if (!data)
-        {
-            return emptyDocument;
-        }
         if (Array.isArray(data))
         {
             return data.map(document => new Product(document));

@@ -17,20 +17,20 @@ class ProductManager
     async getProductById(id)
     {
         await idValidation.parseAsync(id);
-        const product = this.productRepository.getOneProductById(id);
+        const product = await this.productRepository.getOneProductById(id);
         if (Object.keys(product).length === 0 && product.constructor === Object)
         {
-            return 'Product dont exist.';
+            throw new Error ('Product dont exist.');
         }
         return product;
     }
 
     async getOneProductByCode(code)
     {
-        const product = this.productRepository.getOneProductByCode(code);
+        const product = await this.productRepository.getOneProductByCode(code);
         if (Object.keys(product).length === 0 && product.constructor === Object)
         {
-            return 'Product dont exist.';
+            throw new Error ('Product dont exist.');
         }
         return product;
     }
@@ -38,31 +38,31 @@ class ProductManager
     async addProduct(data)
     {
         await productCreateValidation.parseAsync(data);
-        return this.productRepository.createProduct(data);
+        return await this.productRepository.createProduct(data);
     }
 
     async updateProduct(id, data)
     {
         await idValidation.parseAsync(id);
-        const product = this.productRepository.getOneProductById(id);
+        const product = await this.productRepository.getOneProductById(id);
         if (Object.keys(product).length === 0 && product.constructor === Object)
         {
-            return 'Product dont exist.';
+            throw new Error ('Product dont exist.');
         }
         if (data.owner !== product.owner)
         {
             throw new Error('The user is not the owner of the product.');
         }
-        return this.productRepository.updateProduct(id, data);
+        return await this.productRepository.updateProduct(id, data);
     }
 
     async deleteOneProduct(id, user)
     {
         await idValidation.parseAsync(id);
-        const product = this.productRepository.getOneProductById(id);
+        const product = await this.productRepository.getOneProductById(id);
         if (Object.keys(product).length === 0 && product.constructor === Object)
         {
-            return 'Product dont exist.';
+            throw new Error ('Product dont exist.');
         }
         if (product.enable === false)
         {
@@ -72,7 +72,7 @@ class ProductManager
         {
             throw new Error('The user is not the owner of the product.');
         }
-        const productdeleted = this.productRepository.deleteProduct(id);
+        const productdeleted = await this.productRepository.deleteProduct(id);
         delete Object.assign(productdeleted, { email: productdeleted.owner }).owner;
         const sendMailProductDeleted = await this.emailManager.send(productdeleted, 'mailProductDeletedTemplate.hbs', 'Producto eliminado');
         if (!sendMailProductDeleted)
