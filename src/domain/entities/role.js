@@ -5,6 +5,7 @@ class Role
       this.id = props.id;
       this.name = props.name;
       this.permissions = props.permissions;
+      this.enable = props.enable;
   }
 }
 

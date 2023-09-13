@@ -55,7 +55,7 @@ class RoleManager
 
   async deleteOne(id)
 {
-    await idValidation.parseAsync({ id });
+    await idValidation.parseAsync(id);
     const role = await this.roleRepository.deleteOne(id);
     if (Object.keys(role).length === 0 && role.constructor === Object)
         {
