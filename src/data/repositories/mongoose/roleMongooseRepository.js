@@ -27,10 +27,10 @@ class RoleMongooseRepository
     const { limit, page } = criteria;
     const paginateOptions =
     {
-        page: page || 1,
-        limit: limit || 10
+      page: page || 1,
+      limit: limit || 10
     };
-    const roleDocuments = await roleSchema.paginate(paginateOptions);
+    const roleDocuments = await roleSchema.paginate({}, paginateOptions);
     const { docs, ...pagination } = roleDocuments;
 
     const roles = this.#roleInfo(docs);

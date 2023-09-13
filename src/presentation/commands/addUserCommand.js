@@ -27,7 +27,7 @@ AddUserCommand
     const user = await manager.create(payload);
     if (user)
     {
-      pinoLogger.info(`User created successfully - User: ${user}`);
+      pinoLogger.info(`User created successfully - User: ${user.email}`);
     }
   });
 

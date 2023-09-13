@@ -12,6 +12,7 @@ class UserManager
   constructor()
   {
     this.userRepository = container.resolve('UserRepository');
+    this.roleRepository = container.resolve('RoleRepository');
     this.roleManager = new RoleManager();
     this.emailManager = new EmailManager();
   }
@@ -51,17 +52,17 @@ class UserManager
     {
       throw new Error('User already exist');
     }
-    let roleDocument = await this.roleManager.getRoleByName(data.role);
-    
-    if (roleDocument == null)
+
+    let roleDocument = await this.roleRepository.getRoleByName(data.role);
+    if (Object.keys(roleDocument).length === 0)
     {
-      roleDocument = this.roleManager.getRoleByName('client');
+      roleDocument = await this.roleRepository.getRoleByName('client');
     }
     const dto =
     {
       ...data,
       password: await Hash.createHash(data.password),
-      role: roleDocument
+      role: roleDocument.id
     };
     const user = await this.userRepository.create(dto);
     return { ...user, password: undefined };

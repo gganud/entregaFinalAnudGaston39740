@@ -12,12 +12,12 @@ class RoleManager
 
   async paginate(criteria)
 {
-    return await this.roleRepository.paginate(criteria);
+  return await this.roleRepository.paginate(criteria);
   }
 
   async getOne(id)
 {
-    await idValidation.parseAsync({ id });
+  await idValidation.parseAsync(id);
     const role = await this.roleRepository.getOne(id);
     if (Object.keys(role).length === 0 && role.constructor === Object)
         {

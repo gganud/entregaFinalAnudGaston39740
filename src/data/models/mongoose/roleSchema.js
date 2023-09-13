@@ -3,7 +3,8 @@ import paginate from 'mongoose-paginate-v2';
 
 const roleCollection = 'roles';
 
-const roleSchema = new Schema({
+const roleSchema = new Schema(
+{
   name: { type: Schema.Types.String, required: true },
   permissions: [{ type: Schema.Types.String }]
 });

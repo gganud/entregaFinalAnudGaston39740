@@ -25,10 +25,30 @@ base de datos **NoSQL [MongoDB](https://www.mongodb.com/docs/manual/)** que util
 - Logger con PinoLogger
 
 # Comandos de inicio
+
+### Inicializar app
+
+> Crea el usuario admin y los roles predeterminados
+user: `admin@admin.com` \
+password: `12345678`
+
+```shell
+npm run command init
+```
+
+### Crear usuario admin
+
 > Ingresar el siguiente comando para obtener el usuario admin.
 ```shell
 npm run command -- addUser -e admin@admin.com -fn admin -ln admin -p 12345678 -a 32 -ia true
 ```
+
+## Para ejecutar con nodemon
+
+```shell
+npm run dev
+```
+
 # Docker
 ## Docker Commands
 > Construir imagen

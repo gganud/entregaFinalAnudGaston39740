@@ -39,7 +39,7 @@ class UserMongooseRepository
         page: page || 1,
         limit: limit || 10
     };
-    const userDocuments = await userSchema.paginate(paginateOptions);
+    const userDocuments = await userSchema.paginate({}, paginateOptions);
     const { docs, ...pagination } = userDocuments;
     const users = this.#userInfo(docs);
 

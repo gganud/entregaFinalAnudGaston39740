@@ -6,10 +6,9 @@ class RoleController
 {
         try
 {
-            const { limit, page } = req.query;
             const manager = new RoleManager();
-            const roles = await manager.paginate({ limit, page });
-            res.status(200).send({ status: 'success', roles: roles.docs, ...roles, docs: undefined });
+            const roles = await manager.paginate(req.query);
+            res.status(200).send({ status: 'success', payload: roles });
         }
         catch (e)
 {

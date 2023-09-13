@@ -15,12 +15,12 @@ initCommand
   try
   {
     const roleArgs = ['--', 'createDefaultRoles'];
-    const adminArgs = ['--', 'createDefaultAdmin'];
+    const adminArgs = ['--', 'addUser'];
     await CreateDefaultRolesCommand.parseAsync(roleArgs);
     await CreateDefaultAdminCommand.parseAsync(adminArgs);
     pinoLogger.info('Initialization complete');
-    pinoLogger.info('Admin user: admin@domain.com');
-    pinoLogger.info('Admin password: admin');
+    pinoLogger.info('Admin user: admin@admin.com');
+    pinoLogger.info('Admin password: 12345678');
   }
   catch (error)
   {

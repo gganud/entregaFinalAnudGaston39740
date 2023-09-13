@@ -16,29 +16,29 @@ createDefaultAdminCommand
     {
       if (!options.email)
       {
-        options.email = 'admin@domain.com';
+        options.email = 'admin@admin.com';
       }
       if (!options.password)
       {
-        options.password = 'admin';
+        options.password = '12345678';
       }
       const userArgs = [
         '--',
         'addUser',
-        '--email',
+        '-e',
         options.email,
-        '--password',
+        '-fn',
+        'admin',
+        '-ln',
+        'admin',
+        '-p',
         options.password,
-        '--firstName',
-        'Admin',
-        '--lastName',
-        'User',
-        '--age',
-        18,
-        '--isAdmin',
-        true
+        '-a',
+        33,
+        '-ia',
+        'true'
       ];
-      const p = await addUserCommand.parseAsync(userArgs);
+      await addUserCommand.parseAsync(userArgs);
     }
     catch (e)
     {
