@@ -1,8 +1,8 @@
 import { Command } from 'commander';
 
 import RoleManager from '../../domain/managers/roleManager.js';
-import pinoLogger from '../../config/pinoLogger.js';
-import defaultRoles from '../../config/index.js';
+import pinoLogger from '../../config/pinoLoggerConfig.js';
+import { defaultRoles } from '../../config/index.js';
 
 const createDefaultRolesCommand = new Command('createDefaultRoles')
   .version('1.0.0')
@@ -25,12 +25,11 @@ const createDefaultRolesCommand = new Command('createDefaultRoles')
       };
       await manager.create(clientRole);
       await manager.create(premiumRole);
-
       pinoLogger.info('Roles created');
     }
-    catch (error)
+    catch (e)
     {
-      pinoLogger.error('Error creating roles:', error.message);
+      pinoLogger.error('Error creating roles:', e.message);
     }
   });
 

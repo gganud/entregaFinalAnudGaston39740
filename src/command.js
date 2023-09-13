@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import config from './config/index.js';
-import pinoLogger from './config/pinoLogger.js';
+import pinoLogger from './config/pinoLoggerConfig.js';
 import DbFactory from './data/factories/dbFactory.js';
 import AddUserCommand from './presentation/commands/addUserCommand.js';
 import CreateDefaultRolesCommand from './presentation/commands/createDefaultRolesCommand.js';

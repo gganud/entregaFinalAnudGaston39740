@@ -47,11 +47,12 @@ class UserManager
   {
     await userCreateValidation.parseAsync(data);
     const userExists = await this.userRepository.getOneByEmail(data.email);
-    if (userExists)
+    if (Object.keys(userExists).length !== 0)
     {
-      throw new Error ('User dont exist.');
+      throw new Error('User already exist');
     }
     let roleDocument = await this.roleManager.getRoleByName(data.role);
+    
     if (roleDocument == null)
     {
       roleDocument = this.roleManager.getRoleByName('client');

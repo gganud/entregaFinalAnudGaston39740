@@ -47,6 +47,11 @@ const errorHandler = (err, req, res, next) =>
     pinoLogger.warning(err.stack);
     return res.status(401).send({ message: 'User don\'t exist.' });
   }
+  else if (err?.message.includes('User already exist'))
+{
+    pinoLogger.warning(err.stack);
+    return res.status(401).send({ message: 'User already exist.' });
+  }
   pinoLogger.error(err.stack);
   res.status(500).json({ message: 'Ocurrió un error' });
 };

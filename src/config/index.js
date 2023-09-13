@@ -37,7 +37,7 @@ const permissionsPremium =
         'readRole',
         'payOrder'
       ];
-const permissions = permissionsPremium.splice(3);
+const permissions = permissionsPremium.slice(3);
 export const defaultRoles =
 {
     client: permissions,

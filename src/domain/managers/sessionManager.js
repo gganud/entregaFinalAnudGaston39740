@@ -38,15 +38,15 @@ class SessionManager
   {
     await userCreateValidation.parseAsync(payload);
     const userExists = await this.userRepository.getOneByEmail(payload.email);
-    if (userExists)
+    if (Object.keys(userExists).length !== 0)
     {
-      return 'User already exists.';
+      throw new Error('User already exist');
     }
     const role = await this.roleRepository.getRoleByName('client');
     const dto = {
       ...payload,
       password: await Hash.createHash(payload.password),
-      role
+      role: role.id
     };
     const user  = await this.userRepository.create(dto);
     return { ...user, password: undefined };
