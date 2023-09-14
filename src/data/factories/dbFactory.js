@@ -17,4 +17,5 @@ class DbFactory
     }
 }
 
+
 export default DbFactory;
