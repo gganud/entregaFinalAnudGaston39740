@@ -78,6 +78,7 @@ class SessionManager
     {
       throw new Error('Error sending mail');
     }
+    return data.token;
   }
 
   async forgotchangePassword(data)

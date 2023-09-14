@@ -69,9 +69,10 @@ class SessionController
         {
             const { email } = req.body;
             const manager = new SessionManager();
-            await manager.forgotPassword(email);
+            const token = await manager.forgotPassword(email);
             res.status(200).send({
             status: 'Success',
+            token,
             message: 'Mail sent successfully. Please check your email to reset your password'
             });
         }
