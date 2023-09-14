@@ -70,9 +70,9 @@ class SessionManager
     const data =
     {
       token,
-      email
+      email,
+      url: config.frontUrl
     };
-    Object.assign(data, { url: config.frontUrl });
     const sendMail = await this.emailManager.send(data, 'mailForgotPasswordTemplate.hbs', 'Cambio de contraseña');
     if (!sendMail)
     {

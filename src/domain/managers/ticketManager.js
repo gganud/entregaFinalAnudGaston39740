@@ -40,7 +40,7 @@ class TicketManager
             // sumar precio * cantidad
             amount += productInDb.price * product.quantity;
             // Actualizo stock del producto
-            const updatedProduct = await this.productManager.updateProduct(product.product.id, { $inc: { stock: -product.quantity } });
+            const updatedProduct = await this.productManager.updateProductQuantity(product.product.id, { $inc: { stock: -product.quantity } });
             // si me quedo sin stock actualizo el enable del producto
             if (updatedProduct.stock === 0)
             {
@@ -62,7 +62,7 @@ class TicketManager
             }))
         };
         // Vacio carrito luego de emitir el ticket
-        await this.cartManager.deleteProducts(productsOrder.idCart);
+        await this.cartManager.deleteProducts(productsOrder.idCart.toString());
         // envio el ticket por mail.
         const sendMailTicket = await this.emailManager.send(ticket, 'mailTicketTemplate.hbs', 'Ticket de compra');
         if (!sendMailTicket)

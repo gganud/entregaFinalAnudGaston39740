@@ -6,10 +6,9 @@ class UserController
     {
         try
         {
-                const { limit, page } = req.query;
                 const manager = new UserManager();
-                const users = await manager.paginate({ limit, page });
-                res.status(200).send({ status: 'success', users: users.docs, ...users, docs: undefined });
+                const users = await manager.paginate(req.query);
+                res.status(200).send({ status: 'success', payload: users });
         }
         catch (e)
         {

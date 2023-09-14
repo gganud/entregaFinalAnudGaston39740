@@ -1,7 +1,6 @@
 import container from '../../container.js';
 import Hash from '../../shared/bcrypt.js';
 import userCreateValidation from '../validations/user/userCreateValidation.js';
-import userUpdateValidation from '../validations/user/userUpdateValidation.js';
 import emailValidation from '../validations/user/emailValidation.js';
 import idValidation from '../validations/shared/idValidation.js';
 import EmailManager from './emailManager.js';
@@ -35,7 +34,7 @@ class UserManager
 
   async getOne(id)
   {
-    await idValidation.parseAsync({ id });
+    await idValidation.parseAsync(id);
     const user = await this.userRepository.getOne(id);
     if (Object.keys(user).length === 0 && user.constructor === Object)
     {
@@ -70,7 +69,6 @@ class UserManager
 
   async updateOne(id, data)
   {
-    await userUpdateValidation.parseAsync({ ...data, id });
     const user = await this.userRepository.updateOne(id, data);
     if (Object.keys(user).length === 0 && user.constructor === Object)
     {
@@ -81,7 +79,7 @@ class UserManager
 
   async deleteOne(id)
   {
-    await idValidation.parseAsync({ id });
+    await idValidation.parseAsync(id);
     const user = await this.userRepository.deleteOne(id);
     if (Object.keys(user).length === 0 && user.constructor === Object)
     {
@@ -129,7 +127,7 @@ class UserManager
     {
       throw new Error('Roles not found');
     }
-    const user = await this.userRepository.getUserById(id);
+    const user = await this.userRepository.getOne(id);
     if (Object.keys(user).length === 0 && user.constructor === Object)
     {
       throw new Error ('User dont exist.');
@@ -145,7 +143,7 @@ class UserManager
     {
       if (!hasDocuments)
       {
-        throw new Error('Missing user documents');
+        throw new Error('Missing user documents.');
       }
       newRoleId = premiumRole.id;
     }
@@ -153,7 +151,7 @@ class UserManager
     {
       newRoleId = clientRole.id;
     }
-    const userUpdated = await this.userRepository.updateUser(id, { role: newRoleId });
+    const userUpdated = await this.userRepository.updateOne(id, { role: newRoleId });
     return { ...userUpdated, password: undefined };
   }
 

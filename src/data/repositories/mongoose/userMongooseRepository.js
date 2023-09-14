@@ -41,7 +41,7 @@ class UserMongooseRepository
     };
     const userDocuments = await userSchema.paginate({}, paginateOptions);
     const { docs, ...pagination } = userDocuments;
-    const users = this.#userInfo(docs);
+    const users = await this.#userInfo(docs);
 
     return {
       users,
@@ -75,7 +75,7 @@ class UserMongooseRepository
 
   async deleteOne(id)
   {
-  const userDocument = await userSchema.findOneAndUpdate({ _id: id }, { status: false });
+  const userDocument = await userSchema.findOneAndUpdate({ _id: id }, { status: false }, { new: true });
   return this.#userInfo(userDocument);
   }
 

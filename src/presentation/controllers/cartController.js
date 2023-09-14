@@ -40,7 +40,7 @@ class CartController
             const productManager = new ProductManager();
             const cartManager = new CartManager();
             const searchProduct = await productManager.getProductById(pid);
-            const productAdded = await cartManager.addToCart(cid, searchProduct.id, req.user);
+            const productAdded = await cartManager.addToCart(cid, searchProduct.id.toString(), req.user);
             res.status(201).send({ status: 'success', payload: productAdded, message: 'Product added.' });
         }
         catch (e)
@@ -124,6 +124,7 @@ class CartController
           const productsOrder = await cartManager.productsInCart(cid);
           const ticketManager = new TicketManager();
           const ticketOrder = await ticketManager.create(productsOrder);
+          console.log(ticketOrder);
           res.status(200).send({ status: 'success', payload: ticketOrder, message: 'Orden de compra finalizada.' });
         }
         catch (e)

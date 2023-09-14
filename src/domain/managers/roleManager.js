@@ -28,7 +28,7 @@ class RoleManager
 
   async getRoleByName(roleName)
   {
-    const role = await this.roleRepository.getOne(roleName);
+    const role = await this.roleRepository.getRoleByName(roleName);
     if (Object.keys(role).length === 0 && role.constructor === Object)
         {
             throw new Error ('Role dont exist.');

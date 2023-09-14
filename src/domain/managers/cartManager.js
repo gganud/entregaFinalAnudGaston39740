@@ -29,13 +29,14 @@ class CartManager
 
     async addToCart(idC, idP, user)
     {
-        await idValidation.parseAsync(idC, idP);
+        await idValidation.parseAsync(idC);
+        await idValidation.parseAsync(idP);
         const productInDb = await this.productManager.getProductById(idP);
         if (user.email == productInDb.owner)
         {
             throw new Error('El producto pertenece al usuario.');
         }
-        const cart =  this.cartRepository.addProductToCart(idC, idP);
+        const cart =  await this.cartRepository.addProductToCart(idC, idP);
         if (Object.keys(cart).length === 0 && cart.constructor === Object)
         {
             throw new Error ('Cart dont exist.');

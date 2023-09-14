@@ -198,6 +198,19 @@
 			"item": [
 				{
 					"name": "Crear carrito",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"USER_ID\", jsonData.payload.userId);",
+									"postman.setEnvironmentVariable(\"CART_ID\", jsonData.payload.idCart);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -209,8 +222,17 @@
 								}
 							]
 						},
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": \"{{USER_ID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "{{HOSTNAME}}/api/carts",
 							"host": [
@@ -227,17 +249,27 @@
 				{
 					"name": "Obtener Productos del carrito",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{HOSTNAME}}/api/carts/{{CURRENT_USER_CART}}",
+							"raw": "{{HOSTNAME}}/api/carts/{{USER_ID}}",
 							"host": [
 								"{{HOSTNAME}}"
 							],
 							"path": [
 								"api",
 								"carts",
-								"{{CURRENT_USER_CART}}"
+								"{{USER_ID}}"
 							]
 						}
 					},
@@ -259,16 +291,177 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{HOSTNAME}}/api/carts/{{CURRENT_USER_CART}}/proudct/64c06ee6e751fdc36d8aa519",
+							"raw": "{{HOSTNAME}}/api/carts/{{CART_ID}}/product/{{PRODUCT_ID}}",
 							"host": [
 								"{{HOSTNAME}}"
 							],
 							"path": [
 								"api",
 								"carts",
-								"{{CURRENT_USER_CART}}",
-								"proudct",
-								"64c06ee6e751fdc36d8aa519"
+								"{{CART_ID}}",
+								"product",
+								"{{PRODUCT_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar cantidad de Producto en Carrito",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"quantity\":300\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOSTNAME}}/api/carts/{{CART_ID}}/product/{{PRODUCT_ID}}",
+							"host": [
+								"{{HOSTNAME}}"
+							],
+							"path": [
+								"api",
+								"carts",
+								"{{CART_ID}}",
+								"product",
+								"{{PRODUCT_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar un producto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{HOSTNAME}}/api/carts/{{CART_ID}}/product/{{PRODUCT_ID}}",
+							"host": [
+								"{{HOSTNAME}}"
+							],
+							"path": [
+								"api",
+								"carts",
+								"{{CART_ID}}",
+								"product",
+								"{{PRODUCT_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar carrito",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"product\": \"{{PRODUCT_ID}}\",\r\n        \"quantity\": 2\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOSTNAME}}/api/carts/{{CART_ID}}",
+							"host": [
+								"{{HOSTNAME}}"
+							],
+							"path": [
+								"api",
+								"carts",
+								"{{CART_ID}}"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Vaciar Carrito",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"products\": [\r\n        {\r\n            \"_id\": \"6441c165cefeb9886f9c5d72\",\r\n            \"quantity\": 3\r\n        },\r\n        {\r\n            \"_id\": \"6441c18c84383e32436edd0c\",\r\n            \"quantity\": 1\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOSTNAME}}/api/carts/{{CART_ID}}",
+							"host": [
+								"{{HOSTNAME}}"
+							],
+							"path": [
+								"api",
+								"carts",
+								"{{CART_ID}}"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -284,7 +477,7 @@
 									"var jsonData = JSON.parse(responseBody);\r",
 									"console.log(jsonData)\r",
 									"\r",
-									"postman.setEnvironmentVariable(\"ORDER_ID\", jsonData.payload.id);"
+									"postman.setEnvironmentVariable(\"TICKET_ID\", jsonData.payload.id);"
 								],
 								"type": "text/javascript"
 							}
@@ -304,136 +497,15 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{HOSTNAME}}/api/carts/{{CURRENT_USER_CART}}/purchase",
+							"raw": "{{HOSTNAME}}/api/carts/{{CART_ID}}/purchase",
 							"host": [
 								"{{HOSTNAME}}"
 							],
 							"path": [
 								"api",
 								"carts",
-								"{{CURRENT_USER_CART}}",
+								"{{CART_ID}}",
 								"purchase"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Actuaizar cantidad de Producto en Carrito",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"quantity\":300\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{HOSTNAME}}/api/carts/{{CURRENT_USER_CART}}/proudct/{{PRODUCT_ID}}",
-							"host": [
-								"{{HOSTNAME}}"
-							],
-							"path": [
-								"api",
-								"carts",
-								"{{CURRENT_USER_CART}}",
-								"proudct",
-								"{{PRODUCT_ID}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Eliminar un producto",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{HOSTNAME}}/api/carts/{{CURRENT_USER_CART}}/proudct/6441c165cefeb9886f9c5d72",
-							"host": [
-								"{{HOSTNAME}}"
-							],
-							"path": [
-								"api",
-								"carts",
-								"{{CURRENT_USER_CART}}",
-								"proudct",
-								"6441c165cefeb9886f9c5d72"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Actualizar carrito",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"products\": [\r\n        {\r\n            \"product\": \"64eff531c9d71561a9ae19bd\",\r\n            \"quantity\": 2\r\n        },\r\n        {\r\n            \"product\": \"6441c18c84383e32436edd0c\",\r\n            \"quantity\": 1\r\n        }\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{HOSTNAME}}/api/carts/{{CURRENT_USER_CART}}",
-							"host": [
-								"{{HOSTNAME}}"
-							],
-							"path": [
-								"api",
-								"carts",
-								"{{CURRENT_USER_CART}}"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": null,
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Vaciar Carrito",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"products\": [\r\n        {\r\n            \"_id\": \"6441c165cefeb9886f9c5d72\",\r\n            \"quantity\": 3\r\n        },\r\n        {\r\n            \"_id\": \"6441c18c84383e32436edd0c\",\r\n            \"quantity\": 1\r\n        }\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{HOSTNAME}}/api/carts/{{CURRENT_USER_CART}}",
-							"host": [
-								"{{HOSTNAME}}"
-							],
-							"path": [
-								"api",
-								"carts",
-								"{{CURRENT_USER_CART}}"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": null,
-									"disabled": true
-								}
 							]
 						}
 					},
@@ -446,12 +518,23 @@
 			"item": [
 				{
 					"name": "Signup",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set (\"randomNum\", _.random (20,80));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"{{defaultPassword}}\",\r\n    \"firstName\":\"{{$randomFirstName}}\",\r\n    \"lastName\":\"{{$randomLastName}}\"\r\n}",
+							"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"{{defaultPassword}}\",\r\n    \"firstName\":\"{{$randomFirstName}}\",\r\n    \"lastName\":\"{{$randomLastName}}\",\r\n    \"age\": {{randomNum}}\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -491,23 +574,6 @@
 									"var jsonData = JSON.parse(responseBody);\r",
 									"postman.setEnvironmentVariable(\"accessToken\", jsonData.accessToken);\r",
 									"\r",
-									"function parseJwt (token,part) {\r",
-									"   var base64Url = token.split('.')[part];\r",
-									"   var words = CryptoJS.enc.Base64.parse(base64Url);\r",
-									"   var jsonPayload = CryptoJS.enc.Utf8.stringify(words);\r",
-									"   return  JSON.parse(jsonPayload);\r",
-									"};\r",
-									"\r",
-									"var jwtInfo ={};\r",
-									"jwtInfo.size = jsonData.accessToken.length;\r",
-									"jwtInfo.header = parseJwt(jsonData.accessToken,0);\r",
-									"jwtInfo.payload = parseJwt(jsonData.accessToken,1);\r",
-									"jwtInfo.signature = jsonData.accessToken.split('.')[2];\r",
-									"jwtInfo.expires = ((jwtInfo.payload.exp-Date.now().valueOf()/1000)/60).toFixed(1);\r",
-									"console.log(jwtInfo.payload.user.cart._id);\r",
-									"//pm.setEnvironmentVariable(\"CURRENT_USER\", jwtInfo.payload.user)\r",
-									"postman.setEnvironmentVariable(\"CURRENT_USER_CART\", jwtInfo.payload.user.cart._id);\r",
-									"\r",
 									""
 								],
 								"type": "text/javascript"
@@ -519,7 +585,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"{{clientEmail}}\",\r\n    \"password\": \"{{defaultPassword}}\"\r\n}\r\n",
+							"raw": "/* {\r\n    \"email\": \"{{clientEmail}}\",\r\n    \"password\": \"{{defaultPassword}}\"\r\n} */\r\n/* {\r\n    \"email\": \"{{premiumEmail}}\",\r\n    \"password\": \"{{defaultPassword}}\"\r\n} */\r\n{\r\n    \"email\": \"{{adminEmail}}\",\r\n    \"password\": \"{{defaultPassword}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -542,12 +608,34 @@
 				},
 				{
 					"name": "Forgot Password",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"console.log(jsonData)",
+									"postman.setEnvironmentVariable(\"tokenMail\", jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"jarrioja2210@gmail.com\"\r\n}",
+							"raw": "{\r\n    \"email\": \"{{clientEmail}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -555,14 +643,42 @@
 							}
 						},
 						"url": {
-							"raw": "{{hostname}}/api/sessions/forgot-password",
+							"raw": "{{HOSTNAME}}/api/sessions/forgotpassword",
 							"host": [
-								"{{hostname}}"
+								"{{HOSTNAME}}"
 							],
 							"path": [
 								"api",
 								"sessions",
-								"forgot-password"
+								"forgotpassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot New Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"{{defaultPassword}}\",\r\n    \"passwordConfirmation\": \"{{defaultPassword}}\",\r\n    \"token\": \"{{tokenMail}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOSTNAME}}/api/sessions/newpassword",
+							"host": [
+								"{{HOSTNAME}}"
+							],
+							"path": [
+								"api",
+								"sessions",
+								"newpassword"
 							]
 						}
 					},
@@ -571,11 +687,21 @@
 				{
 					"name": "Reset Password",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"password\": \"123456\"\r\n}",
+							"raw": "{\r\n    \"oldPassword\": \"{{defaultPassword}}\",\r\n    \"password\": \"{{defaultPassword}}\",\r\n    \"passwordConfirmation\": \"{{defaultPassword}}\",\r\n    \"token\": \"{{accessToken}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -583,15 +709,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{HOSTNAME}}/api/sessions/reset-password/",
+							"raw": "{{HOSTNAME}}/api/sessions/changeNewPassword",
 							"host": [
 								"{{HOSTNAME}}"
 							],
 							"path": [
 								"api",
 								"sessions",
-								"reset-password",
-								""
+								"changeNewPassword"
 							]
 						}
 					},
@@ -600,6 +725,16 @@
 				{
 					"name": "Logout",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -687,7 +822,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{HOSTNAME}}/api/users/?limit=20",
+							"raw": "{{HOSTNAME}}/api/users/",
 							"host": [
 								"{{HOSTNAME}}"
 							],
@@ -709,13 +844,73 @@
 								},
 								{
 									"key": "limit",
-									"value": "20"
+									"value": "20",
+									"disabled": true
 								},
 								{
 									"key": "role",
 									"value": "user",
 									"disabled": true
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set (\"randomNum\", _.random (20,80));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"USER_ID\", jsonData.payload.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"{{defaultPassword}}\",\r\n    \"firstName\":\"{{$randomFirstName}}\",\r\n    \"lastName\":\"{{$randomLastName}}\",\r\n    \"age\": {{randomNum}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOSTNAME}}/api/users/",
+							"host": [
+								"{{HOSTNAME}}"
+							],
+							"path": [
+								"api",
+								"users",
+								""
 							]
 						}
 					},
@@ -749,14 +944,90 @@
 							}
 						},
 						"url": {
-							"raw": "{{HOSTNAME}}/api/users/64d7b18f7e7cb90874997c50",
+							"raw": "{{HOSTNAME}}/api/users/{{USER_ID}}",
 							"host": [
 								"{{HOSTNAME}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"64d7b18f7e7cb90874997c50"
+								"{{USER_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"firstName\": \"New Name\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOSTNAME}}/api/users/{{USER_ID}}",
+							"host": [
+								"{{HOSTNAME}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{USER_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOSTNAME}}/api/users/{{USER_ID}}",
+							"host": [
+								"{{HOSTNAME}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{USER_ID}}"
 							]
 						}
 					},
@@ -810,82 +1081,6 @@
 					"response": []
 				},
 				{
-					"name": "Create a User",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"{{defaultPassword}}\",\r\n    \"firstName\":\"{{$randomFirstName}}\",\r\n    \"lastName\":\"{{$randomLastName}}\"\r\n    \r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{HOSTNAME}}/api/users/",
-							"host": [
-								"{{HOSTNAME}}"
-							],
-							"path": [
-								"api",
-								"users",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update a User",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"firstName\": \"New Name\"}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{HOSTNAME}}/api/users/64f33462f3535eb886bb6715",
-							"host": [
-								"{{HOSTNAME}}"
-							],
-							"path": [
-								"api",
-								"users",
-								"64f33462f3535eb886bb6715"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Update Role to premium",
 					"request": {
 						"auth": {
@@ -902,7 +1097,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"jesus12321@coder.com\",\r\n    \"password\": \"adminCod3r123\"\r\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -910,7 +1105,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{HOSTNAME}}/api/users/premium/64d82c8f17d20cdc86c6fec3",
+							"raw": "{{HOSTNAME}}/api/users/premium/{{USER_ID}}",
 							"host": [
 								"{{HOSTNAME}}"
 							],
@@ -918,73 +1113,7 @@
 								"api",
 								"users",
 								"premium",
-								"64d82c8f17d20cdc86c6fec3"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete a User",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{HOSTNAME}}/api/users/64d7b18f7e7cb90874997c50",
-							"host": [
-								"{{HOSTNAME}}"
-							],
-							"path": [
-								"api",
-								"users",
-								"64d7b18f7e7cb90874997c50"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Soft Delete Inactive Users",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{HOSTNAME}}/api/users/",
-							"host": [
-								"{{HOSTNAME}}"
-							],
-							"path": [
-								"api",
-								"users",
-								""
+								"{{USER_ID}}"
 							]
 						}
 					},
@@ -1054,6 +1183,56 @@
 					"response": []
 				},
 				{
+					"name": "Create Role",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"ROLE_ID\", jsonData.role.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"exampleRole\",\r\n    \"permissions\": [\r\n        \"readUsers\",\r\n        \"readRoles\",\r\n        \"createProduct\",\r\n        \"updateProduct\",\r\n        \"deleteProduct\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOSTNAME}}/api/roles/",
+							"host": [
+								"{{HOSTNAME}}"
+							],
+							"path": [
+								"api",
+								"roles",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Role",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -1073,7 +1252,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"jesus@coder.com\",\r\n    \"password\": \"adminCod3r123\"\r\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1081,52 +1260,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{HOSTNAME}}/api/roles/64d585d093b2dad91149433c",
+							"raw": "{{HOSTNAME}}/api/roles/{{ROLE_ID}}",
 							"host": [
 								"{{HOSTNAME}}"
 							],
 							"path": [
 								"api",
 								"roles",
-								"64d585d093b2dad91149433c"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Role",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"shitmium\",\r\n    \"permissions\": [\r\n        \"readUsers\",\r\n        \"readRoles\",\r\n        \"createProduct\",\r\n        \"updateProduct\",\r\n        \"deleteProduct\"\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{HOSTNAME}}/api/roles/",
-							"host": [
-								"{{HOSTNAME}}"
-							],
-							"path": [
-								"api",
-								"roles",
-								""
+								"{{ROLE_ID}}"
 							]
 						}
 					},
@@ -1149,7 +1290,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"premium3\",\r\n    \"permissions\": [\r\n        \"readUsers\",\r\n        \"readRoles\",\r\n        \"createProduct\",\r\n        \"updateProduct\",\r\n        \"deleteProduct\"\r\n    ]\r\n}",
+							"raw": "{\r\n    \"name\": \"roleModified\",\r\n    \"permissions\": [\r\n        \"readUsers\",\r\n        \"readRoles\",\r\n        \"createProduct\",\r\n        \"updateProduct\",\r\n        \"deleteProduct\"\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1157,14 +1298,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{HOSTNAME}}/api/roles/64f33a6073b88b92c4db5079",
+							"raw": "{{HOSTNAME}}/api/roles/{{ROLE_ID}}",
 							"host": [
 								"{{HOSTNAME}}"
 							],
 							"path": [
 								"api",
 								"roles",
-								"64f33a6073b88b92c4db5079"
+								"{{ROLE_ID}}"
 							]
 						}
 					},
@@ -1195,14 +1336,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{HOSTNAME}}/api/roles/64deadff0627d8c23bd8e0dd",
+							"raw": "{{HOSTNAME}}/api/roles/{{ROLE_ID}}",
 							"host": [
 								"{{HOSTNAME}}"
 							],
 							"path": [
 								"api",
 								"roles",
-								"64deadff0627d8c23bd8e0dd"
+								"{{ROLE_ID}}"
 							]
 						}
 					},
@@ -1211,38 +1352,23 @@
 			]
 		},
 		{
-			"name": "Payments",
-			"item": [
-				{
-					"name": "Pagar Orden",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{HOSTNAME}}/api/payments/{{ORDER_ID}}",
-							"host": [
-								"{{HOSTNAME}}"
-							],
-							"path": [
-								"api",
-								"payments",
-								"{{ORDER_ID}}"
-							]
-						}
-					},
-					"response": []
+			"name": "LoggerTest Get",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOSTNAME}}/api/loggertest/debug",
+					"host": [
+						"{{HOSTNAME}}"
+					],
+					"path": [
+						"api",
+						"loggertest",
+						"debug"
+					]
 				}
-			]
+			},
+			"response": []
 		}
 	],
 	"auth": {
@@ -1274,6 +1400,10 @@
 			"value": "localhost:5000",
 			"type": "string",
 			"disabled": true
+		},
+		{
+			"key": "randomNum",
+			"value": ""
 		}
 	]
 }

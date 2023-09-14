@@ -9,7 +9,7 @@ class EmailManager
     constructor()
     {
         this.templatesEngine = Handlebars;
-        this.smtp_config = { // Mail Gmail
+        /* this.smtp_config = { // Mail Gmail
             service: 'gmail',
             port: 587,
             auth: {
@@ -17,11 +17,11 @@ class EmailManager
             pass: config.mailKey
             },
             secure: false
-        };
-        /* this.smtp_config = { // mailHog
+        }; */
+        this.smtp_config = { // mailHog
             host: 'mail',
             port: 1025
-        }; */
+        };
     }
 
     async send(data, templateFile, subject)

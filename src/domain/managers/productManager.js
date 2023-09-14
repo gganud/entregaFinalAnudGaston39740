@@ -56,6 +56,17 @@ class ProductManager
         return await this.productRepository.updateProduct(id, data);
     }
 
+    async updateProductQuantity(id, data)
+    {
+        await idValidation.parseAsync(id);
+        const product = await this.productRepository.getOneProductById(id);
+        if (Object.keys(product).length === 0 && product.constructor === Object)
+        {
+            throw new Error ('Product dont exist.');
+        }
+        return await this.productRepository.updateProduct(id, data);
+    }
+
     async deleteOneProduct(id, user)
     {
         await idValidation.parseAsync(id);

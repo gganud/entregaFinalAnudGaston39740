@@ -48,9 +48,14 @@ const errorHandler = (err, req, res, next) =>
     return res.status(401).send({ message: 'User don\'t exist.' });
   }
   else if (err?.message.includes('User already exist'))
-{
+  {
     pinoLogger.warning(err.stack);
     return res.status(401).send({ message: 'User already exist.' });
+  }
+  else if (err?.message.includes('Missing user documents.'))
+  {
+    pinoLogger.warning(err.stack);
+    return res.status(401).send({ message: 'Missing user documents' });
   }
   pinoLogger.error(err.stack);
   res.status(500).json({ message: 'Ocurrió un error' });
