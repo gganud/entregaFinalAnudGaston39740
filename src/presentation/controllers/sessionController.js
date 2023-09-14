@@ -69,7 +69,7 @@ class SessionController
         {
             const { email } = req.body;
             const manager = new SessionManager();
-            const token = await manager.forgotPassword(email);
+            const token = await manager.forgotPassword(email); // Solo devuelvo el token que se envia por mail para poder probar el ciclo sin necesidad de la vista.
             res.status(200).send({
             status: 'Success',
             token,
