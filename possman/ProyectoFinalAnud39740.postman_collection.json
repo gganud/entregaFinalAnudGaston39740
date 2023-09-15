@@ -585,7 +585,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "/* {\r\n    \"email\": \"{{clientEmail}}\",\r\n    \"password\": \"{{defaultPassword}}\"\r\n} */\r\n/* {\r\n    \"email\": \"{{premiumEmail}}\",\r\n    \"password\": \"{{defaultPassword}}\"\r\n} */\r\n{\r\n    \"email\": \"{{adminEmail}}\",\r\n    \"password\": \"{{defaultPassword}}\"\r\n}",
+							"raw": "{\r\n    \"email\": \"{{clientEmail}}\",\r\n    \"password\": \"{{defaultPassword}}\"\r\n}\r\n/* {\r\n    \"email\": \"{{premiumEmail}}\",\r\n    \"password\": \"{{defaultPassword}}\"\r\n} */\r\n/* {\r\n    \"email\": \"{{adminEmail}}\",\r\n    \"password\": \"{{defaultPassword}}\"\r\n} */",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -974,7 +974,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"firstName\": \"New Name\"}",
+							"raw": "{\"documents\": \"New Name\"}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1052,28 +1052,43 @@
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "profile",
+									"key": "profiles",
 									"contentType": "",
 									"type": "file",
-									"src": "/C:/Users/Jarri/Downloads/VP-SALES---REALTOR-MARIA-PIA-MCLEOD.jpg"
+									"src": []
 								},
 								{
-									"key": "document",
+									"key": "products",
 									"contentType": "",
 									"type": "file",
-									"src": "/C:/Users/Jarri/Downloads/elementor-submissions-export-Early Tickets (23e7c13)-2023-08-09.csv"
+									"src": []
+								},
+								{
+									"key": "identification",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "adressProof",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "accountStateProof",
+									"type": "file",
+									"src": []
 								}
 							]
 						},
 						"url": {
-							"raw": "{{HOSTNAME}}/api/users/64d7b18f7e7cb90874997c50/documents",
+							"raw": "{{HOSTNAME}}/api/users/{{USER_ID}}/documents",
 							"host": [
 								"{{HOSTNAME}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"64d7b18f7e7cb90874997c50",
+								"{{USER_ID}}",
 								"documents"
 							]
 						}

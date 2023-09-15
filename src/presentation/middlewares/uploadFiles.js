@@ -1,6 +1,6 @@
 import multer from 'multer';
 import fs from 'fs';
-import { resolve } from 'path';
+import path from 'path';
 
 const createFolders = () =>
 {
@@ -38,7 +38,7 @@ const getDestination = (req, file, cb) =>
   {
     folder = 'documents';
   }
-  cb(null, resolve(`./src/public//uploads/${folder}`));
+  cb(null, path.resolve(`./src/public//uploads/${folder}`));
 };
 
 const storage = multer.diskStorage(
@@ -46,7 +46,12 @@ const storage = multer.diskStorage(
   destination: getDestination,
   filename: (req, file, cb) =>
   {
-    const uniqueFileName = `${req.params.id}-${file.fieldname}`;
+    let extension = ''; // set default extension (if any)
+    if (file.originalname.split('.').length > 1)
+    {
+      extension = path.extname(file.originalname);
+    }
+    const uniqueFileName = `${req.params.id}-${file.fieldname}-${file.originalname.split('.')[0]}${extension}`;
     cb(null, uniqueFileName);
   }
 });
