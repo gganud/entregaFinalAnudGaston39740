@@ -1367,6 +1367,40 @@
 			]
 		},
 		{
+			"name": "Payments",
+			"item": [
+				{
+					"name": "Pagar Orden",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{HOSTNAME}}/api/payments/{{TICKET_ID}}",
+							"host": [
+								"{{HOSTNAME}}"
+							],
+							"path": [
+								"api",
+								"payments",
+								"{{TICKET_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "LoggerTest Get",
 			"request": {
 				"method": "GET",

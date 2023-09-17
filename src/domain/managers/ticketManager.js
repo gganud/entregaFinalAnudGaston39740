@@ -52,7 +52,7 @@ class TicketManager
             code: nanoid(),
             purchase_datetime: new Date(),
             amount,
-            email: productsOrder.userId.email,
+            purchaser: productsOrder.userId.email,
             products: productsOrder.products.map(item =>
             ({
                     id: item.product.id,
@@ -61,15 +61,17 @@ class TicketManager
                     quantity: item.quantity
             }))
         };
+        const ticketDb = await this.ticketRepository.create(ticket);
         // Vacio carrito luego de emitir el ticket
         await this.cartManager.deleteProducts(productsOrder.idCart.toString());
         // envio el ticket por mail.
+        delete Object.assign(ticket, { email: ticket.purchaser }).purchaser;
         const sendMailTicket = await this.emailManager.send(ticket, 'mailTicketTemplate.hbs', 'Ticket de compra');
         if (!sendMailTicket)
         {
             throw new Error('Error sending mail');
         }
-        return await this.ticketRepository.create(ticket);
+        return ticketDb;
     }
 
     async getOne(idT)
@@ -94,6 +96,7 @@ class TicketManager
         {
             throw new Error ('Ticket dont found.');
         }
+        delete Object.assign(ticketUpdated, { email: ticketUpdated.purchaser }).purchaser;
         const sendMailTicket = await this.emailManager.send(ticketUpdated, 'mailPayConfirmationTemplate.hbs', 'Confirmacion de pago');
         if (!sendMailTicket)
         {

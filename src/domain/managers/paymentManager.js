@@ -22,7 +22,12 @@ class PaymentManager
       currency,
       receipt_email: purchaser,
       confirm: true,
-      payment_method: 'pm_card_visa'
+      payment_method: 'pm_card_visa',
+      automatic_payment_methods:
+      {
+        enabled: true,
+        allow_redirects: 'never'
+      }
     });
 
     return (

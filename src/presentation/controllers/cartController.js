@@ -124,7 +124,6 @@ class CartController
           const productsOrder = await cartManager.productsInCart(cid);
           const ticketManager = new TicketManager();
           const ticketOrder = await ticketManager.create(productsOrder);
-          console.log(ticketOrder);
           res.status(200).send({ status: 'success', payload: ticketOrder, message: 'Orden de compra finalizada.' });
         }
         catch (e)
